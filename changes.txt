@@ -1,0 +1,27 @@
+====================
+* Recursive Import *
+====================
+files:
+ - recursive_batch_add.php
+
+Slight modification of batch_add.php making it fully recursive (except for
+maybe symbolic links, haven't tested w/ those). Also added some coloring to the
+success and failure messages so you can tell at a glance which ones failed.
+there's also a count of how many files were processed, how many succeeded, and
+how many failed.
+
+
+================
+* Special Tags *
+================
+files:
+ - config.php
+ - default.css
+ - post_view.php
+
+Sort of a band-aid solution until v0.2.X or maybe even 0.3 is released as I'm
+sure those versions have a much better implementation than just putting a
+specially recognized string at the beginning of a tag. One thing that isn't on
+the site right now though (v0.2.5 at TOW) is keeping special tags separate from
+regular ones when viewing a specific post like danbooru does; that capability
+has been added to post_view.php.
