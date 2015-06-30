@@ -24,4 +24,6 @@ sure those versions have a much better implementation than just putting a
 specially recognized string at the beginning of a tag. One thing that isn't on
 the site right now though (v0.2.5 at TOW) is keeping special tags separate from
 regular ones when viewing a specific post like danbooru does; that capability
-has been added to post_view.php.
+has been added to post_view.php. Special tags are those that begin with a
+string that is present in the $special_tags array (character_doofus, game_pong,
+etc.)
