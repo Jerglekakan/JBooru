@@ -17,7 +17,7 @@ how many failed.
 files:
  - config.php
  - default.css
- - post_view.php
+ - includes/post_view.php
 
 Sort of a band-aid solution until v0.2.X or maybe even 0.3 is released as I'm
 sure those versions have a much better implementation than just putting a
@@ -27,3 +27,13 @@ regular ones when viewing a specific post like danbooru does; that capability
 has been added to post_view.php. Special tags are those that begin with a
 string that is present in the $special_tags array (character_doofus, game_pong,
 etc.)
+
+=============
+* List Tags *
+=============
+files:
+ - index.php
+ - includes/tags.php
+ - includes/header.php
+
+Gives a printout of some/all tags in the database and how many posts use them
