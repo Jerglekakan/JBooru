@@ -85,6 +85,12 @@
 				foreach($tmp_arr as $spec_tag)
 				{
 					$count = $post->index_count($spec_tag);
+					//Capitalize characters immediatly after a period
+                                                for($i = 1; $i < strlen($spec_tag); $i++)
+                                                {
+                                                        if(ctype_alpha($spec_tag[$i]) && $spec_tag[$i-1] == '.')
+                                                                $spec_tag[$i] = strtoupper($spec_tag[$i]);
+                                                }
 					echo '<li><span style="color: #a0a0a0;">? '.
 					'<a href="index.php?page=post&amp;s=list&amp;tags='.$spec_tag.'" class="'.$cur_tag["class"].'">'.
 						ucwords(  str_replace('_',' ',substr($spec_tag, strlen($cur_tag["tag"])+1))  ).
