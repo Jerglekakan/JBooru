@@ -45,6 +45,8 @@
 		$tmpPath = substr($tmpPath, 0, strrpos($tmpPath, "/")+1);
 	}
 	rScanDir($folders);
+	//Process files directly in $path
+	$cur_folder[] = ".";
 	/*echo "Printing the folders array<br/>";
 	print_r($cur_folder);
 	echo "<br/>Printing the tags array<br/>";
@@ -69,7 +71,7 @@
 				echo "URL:".$dl_url."<br/>";
 				$iinfo = $image->getremoteimage($dl_url);
 				if($iinfo === false)
-					$error = $image->geterror()."<br />Could not add the image.";
+					$error = $image->geterror()."<br/>";
 				else
 					$uploaded_image = true;	
 				//Ok, download of image was successful! (yay?)
@@ -191,7 +193,8 @@
 				else
 				{
 					$rejected_files++;
-					print "<span style=\"color: rgb(255, 0, 0);\">getRemoteImage() failed, file not uploaded</span><br/>";
+					print "<span style=\"color: rgb(255, 0, 0);\">getRemoteImage() failed, file not uploaded</span><br/>
+					Error: ".$error;
 				}
 				print "Valid Extension<br>".$tags2[$i]." | ";
 				print $file."<br><br>";
