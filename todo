@@ -1,3 +1,7 @@
 Export all images with given tag/tag list
 
 remove all images with given tag/tag list
+
+remove all occurences of a tag
+
+replace all occurences of one tag with another
