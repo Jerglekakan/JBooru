@@ -71,7 +71,7 @@
 				echo "URL:".$dl_url."<br/>";
 				$iinfo = $image->getremoteimage($dl_url);
 				if($iinfo === false)
-					$error = $image->geterror()."<br/>";
+					$error = $image->geterror();
 				else
 					$uploaded_image = true;	
 				//Ok, download of image was successful! (yay?)
