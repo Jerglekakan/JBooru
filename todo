@@ -10,3 +10,5 @@ Search images by other properties
   *title
   *rating
   *etc
+
+Add tag/tag set to a set of images (as a string of post IDs)
