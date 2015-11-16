@@ -5,3 +5,8 @@ remove all images with given tag/tag list
 remove all occurences of a tag
 
 replace all occurences of one tag with another
+
+Search images by other properties
+  *title
+  *rating
+  *etc
