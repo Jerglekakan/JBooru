@@ -1,0 +1,78 @@
+<style>
+.formRow {
+	visibility:hidden;
+}
+</style>
+<script>
+	function loadHandle()
+	{
+		dasForm = document.forms['tagForm'];
+		dasForm.elements['action'].addEventListener("change", handleActionChange);
+		dasForm.elements['action'].style.visibility = "visible";
+	}
+	window.addEventListener('load', loadHandle);
+
+	function handleActionChange()
+	{
+		console.log("Action changed to \"" + dasForm.elements['action'].value + "\"");
+		switch(dasForm.elements['action'].value)
+		{
+			case "none":
+				document.getElementById("removeTags").style.visibility = "hidden";
+				document.getElementById("addTags").style.visibility = "hidden";
+				document.getElementById("replaceTags").style.visibility = "hidden";
+				document.getElementById("replacementTags").style.visibility = "hidden";
+				document.getElementById("imageSet").style.visibility = "hidden";
+				break;
+			case "add":
+				document.getElementById("addTags").style.visibility = "visible";
+				document.getElementById("imageSet").style.visibility = "visible";
+
+				document.getElementById("removeTags").style.visibility = "hidden";
+				document.getElementById("replaceTags").style.visibility = "hidden";
+				document.getElementById("replacementTags").style.visibility = "hidden";
+				break;
+			case "remove":
+				document.getElementById("removeTags").style.visibility = "visible";
+				document.getElementById("imageSet").style.visibility = "visible";
+
+				document.getElementById("addTags").style.visibility = "hidden";
+				document.getElementById("replaceTags").style.visibility = "hidden";
+				document.getElementById("replacementTags").style.visibility = "hidden";
+				break;
+			case "replace":
+				document.getElementById("replaceTags").style.visibility = "visible";
+				document.getElementById("replacementTags").style.visibility = "visible";
+				document.getElementById("imageSet").style.visibility = "visible";
+
+				document.getElementById("addTags").style.visibility = "hidden";
+				document.getElementById("removeTags").style.visibility = "hidden";
+				break;
+			default:
+				alert("Wait...wat?");
+				break;
+		}
+	}
+
+	function submitForm()
+	{
+		if(dasForm.elements['action'].value === "none") {
+			alert("Pick an action ya putz!");
+			return;
+		}
+	}
+</script>
+<form method='get' action="admin/index.php?page=tag_ops" name="tagForm">
+	<input type='hidden' value='tags' name='page'></input>
+	<span>Action</span><select name="action">
+		<option selected='selected' value='none'>-Select Option-</option>
+		<option value='add'>Add tag</option>
+		<option value='remove'>Remove tag</option>
+		<option value='replace'>Replace tag</option>
+	</select><br/>
+	<span class="formRow" id="addTags">Tags to add<textarea id="add_tags" name="add_tags" cols="40" rows="5"></textarea></span><br/>
+	<span class="formRow" id="removeTags">Tags to remove<textarea id="remove_tags" name="remove_tags" cols="40" rows="5"></textarea></span><br/>
+	<span class="formRow" id="replaceTags">Replace<input type="text" name="replace_tags"></input></span><br/>
+	<span class="formRow" id="replacementTags">With<input type="text" name="replace_with_tags"></input></span><br/>
+	<span class="formRow" id="imageSet">(optional) Image set [IDs]<textarea id="images" name="images" cols="40" rows="5"></textarea><br/>
+</form>
