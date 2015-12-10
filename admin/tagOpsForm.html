@@ -1,10 +1,10 @@
 <style>
-.formRow {
+/*.formRow {
 	visibility:hidden;
-}
+}*/
 </style>
 <script>
-	function loadHandle()
+	/*function loadHandle()
 	{
 		dasForm = document.forms['tagForm'];
 		dasForm.elements['action'].addEventListener("change", handleActionChange);
@@ -60,19 +60,24 @@
 			alert("Pick an action ya putz!");
 			return;
 		}
-	}
+	}*/
 </script>
 <form method='get' action="admin/index.php?page=tag_ops" name="tagForm">
 	<input type='hidden' value='tags' name='page'></input>
 	<span>Action</span><select name="action">
 		<option selected='selected' value='none'>-Select Option-</option>
-		<option value='add'>Add tag</option>
-		<option value='remove'>Remove tag</option>
-		<option value='replace'>Replace tag</option>
+		<option value='add'>Add tag(s)</option>
+		<option value='remove'>Remove tag(s)</option>
+		<option value='replace'>Replace tag(s)</option>
 	</select><br/>
+	<h4>Add</h4><br/>
 	<span class="formRow" id="addTags">Tags to add<textarea id="add_tags" name="add_tags" cols="40" rows="5"></textarea></span><br/>
+	<br/><hr>
+	<h4>Remove</h4><br/>
 	<span class="formRow" id="removeTags">Tags to remove<textarea id="remove_tags" name="remove_tags" cols="40" rows="5"></textarea></span><br/>
+	<br/><hr>
+	<h4>Replace</h4><br/>
 	<span class="formRow" id="replaceTags">Replace<input type="text" name="replace_tags"></input></span><br/>
-	<span class="formRow" id="replacementTags">With<input type="text" name="replace_with_tags"></input></span><br/>
+	<span class="formRow" id="replacementTags">With<input type="text" name="new_tags"></input></span><br/>
 	<span class="formRow" id="imageSet">(optional) Image set [IDs]<textarea id="images" name="images" cols="40" rows="5"></textarea><br/>
 </form>
