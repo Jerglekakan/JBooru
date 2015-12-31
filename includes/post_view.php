@@ -44,8 +44,9 @@
 		require "includes/header.php";	
 		echo '<div id="content"><div id="post-view">';
 		if($post->has_children($id))
-			echo '<div style="background: #f0f0f0; padding: 10px; text-align: center; border: 3px solid #dadada;">This post has <a href="index.php?page=post&s=list&tags=parent:'.$id.'"><b>child posts</b></a>. Child posts are often subsequent pages of a doujinshi, or minor variations of the parent post.</div><br><br>';
-
+			echo '<div style="background: #f0f0f0; padding: 10px; text-align: center; border: 3px solid #dadada;">This post has <a href="index.php?page=post&s=list&tags=parent:'.$id.'"><b>child posts</b></a>.</div><br><br>';
+		if($post->has_parent($id))
+			echo '<div style="background: #f0f0f0; padding: 10px; text-align: center; border: 3px solid #dadada;">This post has a <a href="index.php?page=post&s=view&id='.$post->get_parent_id($id).'"><b>parent post</b></a>.</div><br><br>';
 		echo '<div class="sidebar"><div class="space">
 		<h5>Search</h5>
 		<form action="index.php?page=search" method="post">

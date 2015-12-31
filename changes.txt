@@ -37,3 +37,12 @@ files:
  - includes/header.php
 
 Gives a printout of some/all tags in the database and how many posts use them
+
+===============
+* Parent Post *
+===============
+files:
+ - classes/post.view.php
+ - includes/post_view.php
+
+Displays a link to the parent post if there is one

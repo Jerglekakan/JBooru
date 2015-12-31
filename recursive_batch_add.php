@@ -5,7 +5,6 @@
 	$path = "import/";
 	$image = new image();
 	$folders = scandir($path);
-	print "Processing folder for files... Please wait.<br><br>";
 	$tmpPath = "";
 	$cur_folder;
 	$tags2;
@@ -60,6 +59,7 @@
 		foreach($files as $file)
 		{
 			$extension = explode(".",$file);
+			print "<strong>$file</strong><br/>";
 			if($extension['1'] == "jpg" || $extension['1'] == "jpeg" || $extension['1'] == "png" || $extension['1'] == "bmp" || $extension['1'] == "gif" || $extension['1'] == "JPG")
 			{
 				$uploaded_image = false;
@@ -196,8 +196,12 @@
 					print "<span style=\"color: rgb(255, 0, 0);\">getRemoteImage() failed, file not uploaded</span><br/>
 					Error: ".$error;
 				}
-				print "Valid Extension<br>".$tags2[$i]." | ";
-				print $file."<br><br>";
+				print "Tags | ".$tags2[$i];
+				print "<br><br>";
+			}
+			else
+			{
+				print "<span style=\"color: rgb(255, 0, 0);\">Invalid Extension</span><br/><br/>";
 			}
 		}
 		$i++;
