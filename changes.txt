@@ -45,4 +45,35 @@ files:
  - classes/post.view.php
  - includes/post_view.php
 
-Displays a link to the parent post if there is one
+Displays a link to the parent post/child posts if there are any
+
+========================
+* Batch Tag Operations *
+========================
+files:
+ - admin/tag_ops.php
+ - admin/tagOpsForm.html
+ - admin/index.php
+ - admin/left_menu.php
+ - classes/tag.class.php
+
+				**WARNING**
+I've tested this a little for general use cases (read: what I need it to do),
+but haven't gotten around to any corner cases yet. Make backups before use and
+proceed with caution!
+
+Manipulate lots of tags at the same time.
+Features:
+  *Add one or more tags to some or all posts
+  *Remove one or more tags from some or all posts
+  *Replace one tag with another in some or all posts
+  *Specify a set of posts via an ID list or a regular expression matched
+   against a post's properties such as its tags, title, source, etc.
+
+When specifying an ID set, you can specify a range of IDs by seperating the two
+IDs with a hyphen instead of a space. All ranges specified are inclusive (they
+include the two numbers specified). Except for specifying a range, all numbers
+must be seperated by a space.
+
+Example:
+	489 732 590 400-450 789

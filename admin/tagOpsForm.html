@@ -1,83 +1,37 @@
-<style>
-/*.formRow {
-	visibility:hidden;
-}*/
-</style>
-<script>
-	/*function loadHandle()
-	{
-		dasForm = document.forms['tagForm'];
-		dasForm.elements['action'].addEventListener("change", handleActionChange);
-		dasForm.elements['action'].style.visibility = "visible";
-	}
-	window.addEventListener('load', loadHandle);
-
-	function handleActionChange()
-	{
-		console.log("Action changed to \"" + dasForm.elements['action'].value + "\"");
-		switch(dasForm.elements['action'].value)
-		{
-			case "none":
-				document.getElementById("removeTags").style.visibility = "hidden";
-				document.getElementById("addTags").style.visibility = "hidden";
-				document.getElementById("replaceTags").style.visibility = "hidden";
-				document.getElementById("replacementTags").style.visibility = "hidden";
-				document.getElementById("imageSet").style.visibility = "hidden";
-				break;
-			case "add":
-				document.getElementById("addTags").style.visibility = "visible";
-				document.getElementById("imageSet").style.visibility = "visible";
-
-				document.getElementById("removeTags").style.visibility = "hidden";
-				document.getElementById("replaceTags").style.visibility = "hidden";
-				document.getElementById("replacementTags").style.visibility = "hidden";
-				break;
-			case "remove":
-				document.getElementById("removeTags").style.visibility = "visible";
-				document.getElementById("imageSet").style.visibility = "visible";
-
-				document.getElementById("addTags").style.visibility = "hidden";
-				document.getElementById("replaceTags").style.visibility = "hidden";
-				document.getElementById("replacementTags").style.visibility = "hidden";
-				break;
-			case "replace":
-				document.getElementById("replaceTags").style.visibility = "visible";
-				document.getElementById("replacementTags").style.visibility = "visible";
-				document.getElementById("imageSet").style.visibility = "visible";
-
-				document.getElementById("addTags").style.visibility = "hidden";
-				document.getElementById("removeTags").style.visibility = "hidden";
-				break;
-			default:
-				alert("Wait...wat?");
-				break;
-		}
-	}
-
-	function submitForm()
-	{
-		if(dasForm.elements['action'].value === "none") {
-			alert("Pick an action ya putz!");
-			return;
-		}
-	}*/
-</script>
-<form method='get' action="admin/index.php?page=tag_ops" name="tagForm">
-	<input type='hidden' value='tags' name='page'></input>
-	<span>Action</span><select name="action">
+<form method='get' action="index.php" name="tagForm">
+	<input type='hidden' value='tag_ops' name='page'>
+	Action<select name="action">
 		<option selected='selected' value='none'>-Select Option-</option>
 		<option value='add'>Add tag(s)</option>
 		<option value='remove'>Remove tag(s)</option>
 		<option value='replace'>Replace tag(s)</option>
 	</select><br/>
+	(optional) Image set <textarea id="images" name="images" cols="40" rows="5"></textarea><br/>
+	Image set contents <select name="set_type">
+		<option selected="selected" value="id_list">ID list (space seperated)</option>
+		<option value="regex">Regular Expression</option>
+	</select><br/>
+	Regex against post's <select name="regex_against">
+		<option selected="selected" value="tags">Tags</option>
+		<option value="title">Title</option>
+		<option value="source">Source</option>
+		<option value="parent">Parent</option>
+		<option value="creation_date">Creation Date</option>
+		<option value="owner">Owner</option>
+		<option value="height">Height</option>
+		<option value="width">Width</option>
+		<option value="ext">Extension</option>
+	</select><br/>
+	<label><input name="display_regex" type="checkbox" value="checked"> Display Regex result set, but don't change any tags</label>
+	<br/><br/><hr>
 	<h4>Add</h4><br/>
-	<span class="formRow" id="addTags">Tags to add<textarea id="add_tags" name="add_tags" cols="40" rows="5"></textarea></span><br/>
+	Tags to add <textarea id="add_tags" name="add_tags" cols="40" rows="5"></textarea><br/>
 	<br/><hr>
 	<h4>Remove</h4><br/>
-	<span class="formRow" id="removeTags">Tags to remove<textarea id="remove_tags" name="remove_tags" cols="40" rows="5"></textarea></span><br/>
+	Tags to remove <textarea id="remove_tags" name="remove_tags" cols="40" rows="5"></textarea><br/>
 	<br/><hr>
 	<h4>Replace</h4><br/>
-	<span class="formRow" id="replaceTags">Replace<input type="text" name="replace_tags"></input></span><br/>
-	<span class="formRow" id="replacementTags">With<input type="text" name="new_tags"></input></span><br/>
-	<span class="formRow" id="imageSet">(optional) Image set [IDs]<textarea id="images" name="images" cols="40" rows="5"></textarea><br/>
+	Replace <input type="text" name="replace_tags"><br/>
+	With <input type="text" name="new_tags"><br/>
+	<input type="submit" value="Start" >
 </form>
