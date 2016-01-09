@@ -1,10 +1,14 @@
 Export all images with given tag/tag list
 
-remove all images with given tag/tag list
-
 Search images by other properties
   *title
   *rating
   *etc
 
+Default tags for new uploads
+  *per user
+  *per IP?
+
 Test batch tag operations
+
+Test batch remove script

@@ -77,3 +77,31 @@ must be seperated by a space.
 
 Example:
 	489 732 590 400-450 789
+
+=======================
+* Batch Image Removal *
+=======================
+files:
+  - admin/remove_posts.php
+  - admin/removeForm.html
+  - admin/index.php
+  - admin/left_menu.php
+
+				**WARNING**
+I've only tested this script for deletion based on tags. I believe there is a
+bug where cached search results are not being deleted, but that might just be
+a result of using the script before it was in its current state.
+
+Remove lots of images based on one of these:
+  *Tags
+  *ID
+  *Parent ID
+  *Title
+  *Rating
+
+When specifying IDs, ranges are supported just like in "Batch Tag Operations".
+You can also specify all of a given image's child posts. Just put the string
+"parent:" before the image ID.
+When taking input from the tags or title fields you can use wildcards just like
+when searching from the front page. An asterisk (*) represents any number
+characters while a question mark (?) represents any one character.

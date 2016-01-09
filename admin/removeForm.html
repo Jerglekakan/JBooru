@@ -1,33 +1,31 @@
-<style>
-.formRow {
-	visibility:hidden;
-}
-</style>
-<script>
-	function loadHandle()
-	{
-		dasForm = document.forms['optionsForm'];
-	}
-	window.addEventListener('load', loadHandle);
-</script>
-<form method='get' action="admin/index.php?page=remove_posts" name="optionsForm">
-	<input type='hidden' value='tags' name='page'></input>
+<form method='get' action="index.php" name="optionsForm">
+	<input type='hidden' value='remove_posts' name='page'>
 	Remove by <select name="by">
 		<option selected='selected' value='tags'>Tags</option>
+		<option value='ID'>ID</option>
 		<option value='title'>Title</option>
 		<option value='rating'>Rating</option>
-		<option value='parent'>Parent</option>
 	</select><br/>
-	Tags <textarea id="remove_tags" name="remove_tags" cols="40" rows="5"></textarea><br/>
+	(optional) Act only on these posts [ID list] <textarea id="images" name="images" cols="40" rows="5"></textarea><br/>
+	<br/><br/><hr>
+	<h4>Tags</h4>
+	Tags <textarea id="tags" name="tags" cols="40" rows="5"></textarea><br/>
 	Delete posts that contain <select name="require">
 		<option selected='selected' value='all'>all tags</option>
 		<option value='any'>any tag</option>
-	</select><br/>
+	</select>
+	<br/><br/><hr>
+	<h4>Title</h4>
+	Remove posts with a title containing <input type="text" name="title"><br/>
 	Title search method <select name="type">
 		<option selected='selected' value="string_search">Normal search</option>
 		<option value="regex">Regular Expression</option>
-	</select><br/>
-	Remove posts with a title containing <input type="text" name="text"></input><br/>
-	Parent ID <input type="text" name="parent_post_id"></input><br/>
-	(optional) Act only on these posts [ID list] <textarea id="images" name="images" cols="40" rows="5"></textarea><br/>
+	</select>
+	<br/><br/><hr>
+	<h4>Rating</h4>
+	<input type="radio" name="rating" value="safe" checked> Safe<br/>
+	<input type="radio" name="rating" value="questionable"> Questionable<br/>
+	<input type="radio" name="rating" value="explicit"> Explicit<br/><br/><br/>
+	<input name="display_ids" type="checkbox" value="checked"> Display post IDs that will be removed, but don't remove them<br/>
+	<input type="submit" value="Start" >
 </form>
