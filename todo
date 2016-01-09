@@ -1,9 +1,11 @@
 Export all images with given tag/tag list
+  *Ideally in a manner that lets you use the batch upload script without losing
+   any tag data and making as few directories as possible.
+  *Would it even be possible to export other data like aliases, comments, etc?
 
 Search images by other properties
   *title
-  *rating
-  *etc
+  *comment count
 
 Default tags for new uploads
   *per user
