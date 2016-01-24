@@ -105,3 +105,9 @@ You can also specify all of a given image's child posts. Just put the string
 When taking input from the tags or title fields you can use wildcards just like
 when searching from the front page. An asterisk (*) represents any number
 characters while a question mark (?) represents any one character.
+
+======
+*Misc*
+======
+  - classes/search.classes.php
+    *Searches that don't have a parent: parameter will no longer hide children
