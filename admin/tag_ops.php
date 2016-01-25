@@ -113,10 +113,13 @@
 			$itags = explode(" ", $_GET[$field]);
 			foreach($itags as $cur_tag)
 			{
+				$tmp_tag = str_replace("_", "\_", $cur_tag);
+                                $tmp_tag = str_replace("*", "%", $tmp_tag);
+                                $tmp_tag = str_replace("?", "_", $tmp_tag);
 				if($cur_tag === end($itags))
-					$query .= "tags LIKE '% ".$db->real_escape_string($cur_tag)." %';";
+					$query .= "tags LIKE '% ".$db->real_escape_string($tmp_tag)." %';";
 				else
-					$query .= "tags LIKE '% ".$db->real_escape_string($cur_tag)." %' OR ";
+					$query .= "tags LIKE '% ".$db->real_escape_string($tmp_tag)." %' OR ";
 			}
 
 			if($debug) echo "<strong>SQL Query</strong><br/>$query<br/>";
@@ -184,7 +187,7 @@
 		foreach($newtags as $cur_tag)
 		{
 			//Build update query
-			$query = "UPDATE $post_table SET tags = CONCAT(tags, '$cur_tag ') WHERE tags NOT LIKE '%$cur_tag%'";
+			$query = "UPDATE $post_table SET tags = CONCAT(tags, '$cur_tag ') WHERE tags NOT LIKE '% $cur_tag %'";
 			if($all_posts)
 			{
 				$query .= ";";
@@ -224,7 +227,6 @@
 			print_r($losetags);
 			echo "<br/><br/>";
 		}
-
 		foreach($losetags as $cur_tag)
 		{
 			//Build update query
@@ -261,8 +263,8 @@
 	}
 	else if($_GET['action'] == "replace")
 	{
-		$losetag = $db->real_escape_string($_GET['replace_tags']);
-		$newtag = $db->real_escape_string($_GET['new_tags']);
+		$losetag = $db->real_escape_string(htmlentities($_GET['replace_tags'], ENT_QUOTES, 'UTF-8'));
+		$newtag = $db->real_escape_string(htmlentities($_GET['new_tags'], ENT_QUOTES, 'UTF-8'));
 		if(substr($losetag, " ") != FALSE || substr($newtag, " ") != FALSE)
 		{
 			echo "<strong>When replacing one tag with another, neither of the input fields can contain a space</strong><br/>";
