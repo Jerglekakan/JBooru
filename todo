@@ -1,7 +1,14 @@
+Proper tag category implementation
+  *Addition and Deletion of tag categories
+
 Export all images with given tag/tag list
   *Ideally in a manner that lets you use the batch upload script without losing
    any tag data and making as few directories as possible.
   *Would it even be possible to export other data like aliases, comments, etc?
+
+"sample" generation for really large images
+
+Edit and remove Aliases
 
 Search images by other properties
   *title
