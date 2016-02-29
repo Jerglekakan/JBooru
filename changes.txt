@@ -36,7 +36,13 @@ files:
  - includes/tags.php
  - includes/header.php
 
-Gives a printout of some/all tags in the database and how many posts use them
+Gives a printout of some/all tags in the database and how many posts use them.
+When searching for something, any tag that contains the provided text will be
+displayed (so just imagine a wildcard always being directly in front of and
+behind whatever you type). To perform an exact search (effectively just
+verifying if a certain tag exists), put a space in the front and back of what
+you're searching for (so instead of "foobar", search for " foobar "). Providing
+more than one word will result in showing only tags that contain both words.
 
 ===============
 * Parent Post *
