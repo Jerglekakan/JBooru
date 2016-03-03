@@ -2,13 +2,11 @@ Proper tag category implementation
   *Addition and Deletion of tag categories
 
 Export all images with given tag/tag list
-  *Ideally in a manner that lets you use the batch upload script without losing
-   any tag data and making as few directories as possible.
+  *Ideally in a manner that lets you use the batch upload script to re-upload
+   them without losing any tags and making as few directories as possible.
   *Maybe preserve other data like aliases, comments, etc.
 
-"sample" generation for really large images
-
-Edit and remove Aliases
+"sample" image generation for large images
 
 Search images by other properties
   *title
@@ -21,3 +19,8 @@ Default tags for new uploads
 Test batch tag operations
 
 Test batch remove script
+
+
+BUGFIXES:
+  - admin/alias.php
+    *Cannot approve aliases that contain a single quote (')

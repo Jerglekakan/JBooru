@@ -112,8 +112,23 @@ When taking input from the tags or title fields you can use wildcards just like
 when searching from the front page. An asterisk (*) represents any number
 characters while a question mark (?) represents any one character.
 
+==========================
+* Alias Editing/Deletion *
+==========================
+files:
+  - admin/alias_edit.php
+  - admin/index.php
+  - admin/left_menu.php
+
+Allows site administrators to easily delete aliases or change their status.
+
 ======
 *Misc*
 ======
   - classes/search.classes.php
     *Searches that don't have a parent: parameter will no longer hide children
+
+  - includes/alias.php
+  - admin/alias.php
+    *Fixed table column headers ('Alias' was the header for the tag column and
+    vice versa)

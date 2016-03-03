@@ -4,6 +4,8 @@
 		die;
 	if($_GET['page'] == "alias")
 			require "alias.php";
+	else if($_GET['page'] == "alias_edit")
+			require "alias_edit.php";
 	else if($_GET['page'] == "reported_posts")
 			require "reported_posts.php";
 	else if($_GET['page'] == "reported_comments")

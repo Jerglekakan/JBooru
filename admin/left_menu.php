@@ -25,6 +25,7 @@ if($user->gotpermission('is_admin'))
 {
 	echo '<h5>Admin Tools:</h5><br />
 	<a href="?page=tag_ops" title="Bath operations on tags">Tag Operations</a><br/>
+	<a href="?page=alias_edit" title="Edit and delete aliases">Edit/Delete Alias</a><br/>
 	<a href="?page=remove_posts" title="Remove multiple posts">Remove Posts</a><br/><br/>
 	<h6>User Group Tools:</h6>
 	<ul id="tag-sidebar">
