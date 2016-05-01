@@ -20,7 +20,11 @@
 					$query = "UPDATE $tag_index_table SET index_count='".($row['index_count'] + $qt)."' WHERE tag='$tag'";
 				}
 				else
+				{
 					$query = "INSERT INTO $tag_index_table(tag, index_count) VALUES('$tag', '$qt')";
+					$db->query($query);
+					$query = "UPDATE $tag_category_table SET tag_count = tag_count + 1 WHERE category_name='generic'";
+				}
 				$db->query($query);
 			}
 		}
@@ -31,13 +35,17 @@
 			$tag = $db->real_escape_string($tag);
 			if($tag != "")
 			{
-				$query = "SELECT index_count FROM $tag_index_table WHERE tag='$tag'";
+				$query = "SELECT index_count,category FROM $tag_index_table WHERE tag='$tag'";
 				$result = $db->query($query);
 				$row = $result->fetch_assoc();
 				if($row['index_count'] - $qt > 0)
 					$query = "UPDATE $tag_index_table SET index_count='".($row['index_count'] - $qt)."' WHERE tag='$tag'";
 				else
+				{
 					$query = "DELETE FROM $tag_index_table WHERE tag='$tag'";
+					$db->query($query);
+					$query = "UPDATE $tag_category_table SET tag_count = tag_count - 1 WHERE category_name='".$row['category']."'";
+				}
 				$db->query($query);
 			}
 		}

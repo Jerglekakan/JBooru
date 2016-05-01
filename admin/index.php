@@ -20,6 +20,10 @@
 			require "remove_posts.php";
 	else if($_GET['page'] == "tag_ops")
 			require "tag_ops.php";
+	else if($_GET['page'] == "tag_categories")
+			require "tag_categories.php";
+	else if($_GET['page'] == "tag_category_change")
+			require "tag_category_edit.php";
 
 ?>
 <br></body></html>

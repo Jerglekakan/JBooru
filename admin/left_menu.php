@@ -18,6 +18,8 @@ echo '<html><head>
 		<li><a href="?page=reported_posts" title="View the reported posts by users. I hope you do not see many here...">Reported Posts</a></li>
 		<li><a href="?page=reported_comments" title="View the reported comments as well as other info related to the comment.">Reported Comments</a></li>
 		<li><a href="?page=alias" title="Approve or reject pending aliases.">Alias Approve/Reject</a></li>
+		<li><a href="?page=tag_categories" title="Add and Remove tag categories">Add/Delete Tag Categories</a></li>
+		<li><a href="?page=tag_category_change" title="Change a tag\'s category">Edit Tag\'s Category</a></li>
 		</ul>
 		<br />';
 

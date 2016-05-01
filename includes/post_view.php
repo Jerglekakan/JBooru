@@ -23,7 +23,7 @@
 		exit;
 	}
 	$prev_next = $post->prev_next($id);
-	global $special_tags;
+	//global $special_tags;
 	
 	if(!is_dir("$main_cache_dir".""."\cache/$id"))
 		$cache->create_page_cache("cache/$id");
@@ -41,6 +41,22 @@
 		$ttags = explode(" ",$tags);
 		$rating = $post_data['rating'];
 		$lozerisdumb = "- ".str_replace('_',' ',str_replace('&quot;','\\"',$tags));
+		//Setup tag to category map
+		$categories = array();
+		foreach($ttags as $ctag)
+		{
+			$query = "SELECT category from $tag_index_table WHERE tag='".htmlentities($ctag, ENT_QUOTES, 'UTF-8')."' LIMIT 1";
+			$result = $db->query($query);
+			$row = $result->fetch_assoc();
+			if($row['category'] != "generic")
+			{
+				if(!array_key_exists($row['category'], $categories))
+					$categories[$row['category']] = array();
+				$categories[$row['category']][] = $ctag;
+				unset($ttags[array_search($ctag, $ttags)]);
+				$ttags = array_values($ttags);
+			}
+		}
 		require "includes/header.php";	
 		echo '<div id="content"><div id="post-view">';
 		if($post->has_children($id))
@@ -57,54 +73,37 @@
 		<div id="tag_list">
 		<!--<h5>Tags</h5>-->
 		<ul>';
-		foreach($special_tags as $cur_tag)
+		//foreach($special_tags as $cur_tag)
+		foreach($categories as $cat => $tag_arr)
 		{
-			$speccount = 0;
-			$tmp_arr = Array();
-			//echo "<br/>current tag:".$cur_tag["tag"]."<br/>";
-			foreach($ttags as $current)
+			echo "<h5>".ucfirst(str_replace('_',' ',$cat));
+			if(count($tag_arr) > 1)
 			{
-				//echo "&nbsp;&nbsp;&nbsp;&nbsp;".$current.":";
-				if(strcmp($cur_tag["tag"], substr($current, 0, strlen($cur_tag["tag"]))) == 0)
-				{
-					$tmp_arr[] = $current;
-					unset($ttags[array_search($current, $ttags)]);
-					$ttags = array_values($ttags);
-					$speccount++;
-					//echo "yes<br/>";
-				}
+				if(substr($cat, -1) == 's') echo "'";
+				else echo "s";
 			}
-			if($speccount > 0)
+			echo "</h5>";
+			foreach($tag_arr as $spec_tag)
 			{
-				echo "<h5>".ucfirst(str_replace('_',' ',$cur_tag["tag"]));
-				if($speccount > 1)
-				{
-					if(substr($cur_tag["tag"], -1) == 's') echo "'";
-					else echo "s";
-				}
-				echo "</h5>";
-				foreach($tmp_arr as $spec_tag)
-				{
-					$count = $post->index_count($spec_tag);
-					//Capitalize characters immediatly after a period
-						for($i = 1; $i < strlen($spec_tag); $i++)
-						{
-							if(ctype_alpha($spec_tag[$i]) && ($spec_tag[$i-1] == '.' || $spec_tag[$i-1] == '('))
-								$spec_tag[$i] = strtoupper($spec_tag[$i]);
-						}
-					echo '<li><span style="color: #a0a0a0;">? '.
-					'<a href="index.php?page=post&amp;s=list&amp;tags='.$spec_tag.'" class="'.$cur_tag["class"].'">'.
-						ucwords(  str_replace('_',' ',substr($spec_tag, strlen($cur_tag["tag"])+1))  ).
-					"</a> ".$count['index_count']."</span></li>";
-				}
-				echo "<br/>";
+				$count = $post->index_count($spec_tag);
+				//Capitalize characters immediatly after a period
+					for($i = 1; $i < strlen($spec_tag); $i++)
+					{
+						if(ctype_alpha($spec_tag[$i]) && ($spec_tag[$i-1] == '.' || $spec_tag[$i-1] == '('))
+							$spec_tag[$i] = strtoupper($spec_tag[$i]);
+					}
+				echo '<li><span style="color: #a0a0a0;">? '.
+				'<a href="index.php?page=post&amp;s=list&amp;tags='.$spec_tag.'" class="'.$cat.'">'.
+					ucwords(str_replace('_',' ', $spec_tag)).
+				"</a> ".$count['index_count']."</span></li>";
 			}
+			echo "<br/>";
 		}
 		echo "<h5>Tags</h5>";
 		foreach($ttags as $current)
 		{
 			$count = $post->index_count($current);
-			echo '<li><span style="color: #a0a0a0;">? <a href="index.php?page=post&amp;s=list&amp;tags='.$current.'">'.str_replace('_',' ',$current)."</a> ".$count['index_count']."</span></li>";
+			echo '<li><span style="color: #a0a0a0;">? <a href="index.php?page=post&amp;s=list&amp;tags='.$current.'" class="'.$categories[$current].'">'.str_replace('_',' ',$current)."</a> ".$count['index_count']."</span></li>";
 		}
 		echo '<li><br /><br /><br /><br /><br /><br /><br /><br /></li></ul></div></div>';
 		if($post_data['title'] != "")

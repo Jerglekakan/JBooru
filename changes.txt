@@ -11,22 +11,29 @@ there's also a count of how many files were processed, how many succeeded, and
 how many failed.
 
 
-================
-* Special Tags *
-================
+==================
+* Tag Categories *
+==================
 files:
+ - upgrades/categories/index.php
+
  - config.php
  - default.css
+ - admin/index.php
+ - admin/left_menu.php
+ - admin/tag_categories.php
+ - admin/tag_category_edit.php
+ - classes/tag.class.php
+ - includes/post_list.php
  - includes/post_view.php
+ - includes/tags.php
 
-Sort of a band-aid solution until v0.2.X or maybe even 0.3 is released as I'm
-sure those versions have a much better implementation than just putting a
-specially recognized string at the beginning of a tag. One thing that isn't on
-the site right now though (v0.2.5 at TOW) is keeping special tags separate from
-regular ones when viewing a specific post like danbooru does; that capability
-has been added to post_view.php. Special tags are those that begin with a
-string that is present in the $special_tags array (character_doofus, game_pong,
-etc.)
+Tags can now be assigned to a category and tag categories can be created by
+mods and admins. When viewing a single post (post_view.php), tags in the same
+category are grouped together and will be a different color than other tags
+if outlined that way in the css. Tags of the same category are *NOT* grouped
+together when viewing multiple posts, though they are colored according to the
+rules outlined in the css.
 
 =============
 * List Tags *
@@ -68,7 +75,7 @@ I've tested this a little for general use cases (read: what I need it to do),
 but haven't gotten around to any corner cases yet. Make backups before use and
 proceed with caution!
 
-Manipulate lots of tags at the same time.
+Manipulate numerous posts' tags all at once.
 Features:
   *Add one or more tags to some or all posts
   *Remove one or more tags from some or all posts

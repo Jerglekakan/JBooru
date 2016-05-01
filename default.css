@@ -45,12 +45,7 @@ input {
   padding: 0 0.5em;
 }
 
-a:link {
-  color: #006FFA;
-  text-decoration: none;
-}
-
-a:visited {
+a:link, a:visited {
   color: #006FFA;
   text-decoration: none;
 }
@@ -80,66 +75,33 @@ a.help {
   background: #E6E6E6;
 }
 
-/*Copywrights (movies, game series, etc)*/
-a.specialTag1:link, a.specialTag1:visited, a.specialTag1:active {
-  color: #AA0000;
-  text-decoration: none;
-}
-
-a.specialTag1:hover {
-  color: #BB6666;
-  text-decoration: none;
-}
-
-/*Characters*/
-a.specialTag2:link, a.specialTag2:visited, a.specialTag2:active {
+a.character:link, a.character:visited, a.character:active {
   color: #00AA00;
   text-decoration: none;
 }
 
-a.specialTag2:hover {
+a.character:hover{
   color: #66BB66;
   text-decoration: none;
 }
 
-/*Danbooru - Copywright*/
-a.specialTag3:link, a.specialTag3:visited, a.specialTag3:active {
+a.copywright:link, a.copywright:visited, a.copywright:active {
   color: #B800B8;
   text-decoration: none;
 }
 
-a.specialTag3:hover {
+a.copywright:hover {
   color: #BA66BA;
   text-decoration: none;
 }
 
-a.specialTag4:link, a.specialTag4:visited, a.specialTag4:active {
-  color: #04766F;
+a.artist:link, a.artist:visited, a.artist:active {
+  color: #AA0000;
   text-decoration: none;
 }
 
-a.specialTag4:hover {
-  color: #04B2AB;
-  text-decoration: none;
-}
-
-a.specialTag5:link, a.specialTag5:visited, a.specialTag5:active {
-  color: #d38b0c;
-  text-decoration: none;
-}
-
-a.specialTag5:hover {
-  color: #9e4f01;
-  text-decoration: none;
-}
-
-a.specialTag6:link, a.specialTag6:visited, a.specialTag6:active {
-  color: #b2b5f0;
-  text-decoration: none;
-}
-
-a.specialTag6:hover {
-  color: #7679b4;
+a.artist:hover {
+  color: #B66;
   text-decoration: none;
 }
 

@@ -5,7 +5,7 @@
 	$mysql_db = "gelbooru1";
 	
 	//site base url, trailing slash.
-	$site_url = "http://gelbooru.com/";
+	$site_url = "https://gelbooru.com/";
 	//URL to the thumbnails directory
 	$thumbnail_url = $site_url . "thumbnails/";
 	//Site Name. Displays in header.
@@ -23,6 +23,8 @@
 	$post_table = "posts";
 	//tag index table
 	$tag_index_table = "tag_index";
+	//tag categories table
+	$tag_category_table = "tag_categories";
 	//folder index table
 	$folder_index_table = "folder_index";
 	//favorites table
@@ -94,15 +96,4 @@
 	$edit_limit = 20;
 	//cache dir, all cache will be stored in subdirs to this. Put it on RAM or FAST Raid drives.
 	//$main_cache_dir = "NUL:\\";
-	
-	//Tags that deserve a special color/placement when listing tags
-	$special_tags = [
-		["tag" => "game_series", "class" => "specialTag1"],
-		["tag" => "game", "class" => "specialTag1"],
-		["tag" => "genre", "class" => "specialTag5"],
-		["tag" => "platform", "class" => "specialTag6"],
-		["tag" => "character", "class" => "specialTag2"],
-		["tag" => "publisher", "class" => "specialTag3"],
-		["tag" => "developer", "class" => "specialTag4"]
-	];
 ?>

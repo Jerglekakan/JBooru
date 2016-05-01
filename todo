@@ -1,5 +1,5 @@
-Proper tag category implementation
-  *Addition and Deletion of tag categories
+Batch operation for changing tag categories
+  *i.e. change all tags to generic where index_count < 50
 
 Export all images with given tag/tag list
   *Ideally in a manner that lets you use the batch upload script to re-upload

@@ -5,7 +5,7 @@
 
 	$debug = false;
 	$order_values = array(1 => "asc", 2 => "desc");
-	$sort_values = array("name" => "tag", "count" => "index_count");
+	$sort_values = array("name" => "tag", "count" => "index_count", "category" => "category");
 
 	if($debug)
 	{
@@ -14,7 +14,7 @@
 	}
 
 	//Parse inputs
-		if(isset($_GET['results']) && ((int) $_GET['results']) > 0)
+		if(isset($_GET['results']) && ((int) $_GET['results']) >= 0)
 			$tag_limit = (int) $db->real_escape_string($_GET['results']);
 		else
 			$tag_limit = 100;
@@ -55,6 +55,16 @@
 			$select_ofst = ($_GET['pg'] - 1) * $tag_limit;
 		else
 			$select_ofst = 0;
+		if(isset($_GET['category']) && $_GET['category'] != "all" && $_GET['category'] != "All")
+		{
+			$cat = $db->real_escape_string($_GET['category']);
+			if($where_clause == "")
+				$where_clause = "category='$cat'";
+			else
+				$where_clause .= " AND category='$cat'";
+		}
+		else
+			$cat = "all";
 	if($debug)
 	{
 		echo "<strong>Order:</strong>$query_order<br/>
@@ -65,7 +75,7 @@
 
 
 	//Build query
-		$sql_string = "SELECT tag, index_count FROM $tag_index_table";
+		$sql_string = "SELECT tag, index_count, category FROM $tag_index_table";
 		if($where_clause != "")
 			$sql_string .= " WHERE ".$where_clause;
 		if($query_order != "")
@@ -89,7 +99,26 @@
 	if($order_by == "tag") $sort_field .= "selected='selected'";
 	$sort_field .= ">Name</option><option value='count'";
 	if($order_by == "index_count") $sort_field .= "selected='selected'";
-	$sort_field .= ">Count</option></select><br/>";
+	$sort_field .= ">Count</option><option value='category'";
+	if($order_by == "category") $sort_field .= "selected='selected'";
+	$sort_field .= ">Category</option></select><br/>";
+
+
+	$second_string = "SELECT category_name from `$tag_category_table`";
+	$result = $db->query($second_string);
+	$category_field = "<h4>Category</h4><select name='category'><option value='all'";;
+	if(!isset($_GET['category']) || $_GET['category'] == "all") $category_field .= " selected='selected'";
+	$category_field .= ">All</option><option value='generic'";
+	if(isset($_GET['category']) && $_GET['category'] == "generic") $category_field .= " selected='selected'";
+	$category_field .= ">Generic</option>";
+	while($row = $result->fetch_assoc()) {
+		$category_field .= "<option value='".$row['category_name']."'";
+		if(isset($_GET['category']) && $_GET['category'] == $row['category_name'])
+			$category_field .= "selected='selected'";
+		$category_field .= ">".$row['category_name']."</option>";
+	}
+	$result->free_result();
+	$category_field .= "</select><br/>";
 
 
 	echo "<form method='get' action=index.php?page=tags&s=list>
@@ -98,6 +127,7 @@
 		<h4>Name</h4><input id='name' type='text' name='tags' value='".str_replace('+', ' ', $_GET['tags'])."'></input><br/>
 		$order_field
 		$sort_field
+		$category_field
 		<h4>Results per page</h4><input type='text' name='results' value='$tag_limit'></input><br/>
 		<input type='submit' value='Search'></input>
 	</form>";
@@ -106,6 +136,7 @@
 		<tr>
 		<th>Tag</th>
 		<th>Count</th>
+		<th>Category</th>
 		</tr>";
 	$result = $db->query($sql_string);
 	while($row = $result->fetch_assoc())
@@ -113,6 +144,7 @@
 		echo "<tr>
 			<td>".$row['tag']."</td>
 			<td>".$row['index_count']."</td>
+			<td>".$row['category']."</td>
 		</tr>";
 	}
 	$result->free_result();
@@ -158,7 +190,11 @@
 			else
 				$istop = $cur_page+6;
 		}
-		$base_link = "?page=tags&s=list&order=$query_order&sort=$order_by&results=$tag_limit";
+		$base_link = "?page=tags";
+		if(isset($_GET['order'])) $base_link .= "&order=$query_order";
+		if(isset($_GET['sort'])) $base_link .= "&sort=$order_by";
+		if(isset($_GET['results'])) $base_link .= "&results=$tag_limit";
+		if(isset($_GET['category'])) $base_link .= "&category=$cat";
 		if(isset($_GET['tags']))
 			$base_link .= "&tags=".str_replace(' ', '+', htmlentities($_GET['tags'], ENT_QUOTES, 'UTF-8'));
 
