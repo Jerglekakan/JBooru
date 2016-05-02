@@ -10,12 +10,12 @@ success and failure messages so you can tell at a glance which ones failed.
 there's also a count of how many files were processed, how many succeeded, and
 how many failed.
 
-
 ==================
 * Tag Categories *
 ==================
 files:
  - upgrades/categories/index.php
+   *requires classes/tag.class.php if $special_tags is defined in config.php
 
  - config.php
  - default.css
@@ -34,6 +34,31 @@ category are grouped together and will be a different color than other tags
 if outlined that way in the css. Tags of the same category are *NOT* grouped
 together when viewing multiple posts, though they are colored according to the
 rules outlined in the css.
+
+				***NOTE***
+The database must be upgraded for this feature. Copy the upgrade script to the
+upgrades directory of your gelbooru installation. If you used the previous
+implementation of the tag categories feature, you must also copy over the tag
+class file (classes/tag.class.php) before executing the upgrade script. To
+start the upgrade script, use a web browser to enter the URL for the directory
+holding the script.
+
+	Example URL:
+		http://gelbooru.com/upgrades/categories/
+
+If the previous implementation of tag categories was used, the $special_tags
+variable should stay defined in config.php while executing the upgrade script.
+
+				**WARNING**
+If you used the previous implementation of this feature, it is heavily advised
+that you make a backup of your database before executing the upgrade. Although
+each line of code in the upgrade script has been tested and had the bugs worked
+out, several blocks of code that execute when the $special_tags variable is
+present were separated into multiple files during the debugging process and
+haven't been tested since being combined into a single script.
+
+It won't nuke the database or anything, but in the worst case scenario it could
+remove any tag that has a prefix specified in $special_tags from a ton of posts
 
 =============
 * List Tags *
@@ -55,7 +80,7 @@ more than one word will result in showing only tags that contain both words.
 * Parent Post *
 ===============
 files:
- - classes/post.view.php
+ - classes/post.class.php
  - includes/post_view.php
 
 Displays a link to the parent post/child posts if there are any
@@ -70,10 +95,6 @@ files:
  - admin/left_menu.php
  - classes/tag.class.php
 
-				**WARNING**
-I've tested this a little for general use cases (read: what I need it to do),
-but haven't gotten around to any corner cases yet. Make backups before use and
-proceed with caution!
 
 Manipulate numerous posts' tags all at once.
 Features:
@@ -91,6 +112,11 @@ must be seperated by a space.
 Example:
 	489 732 590 400-450 789
 
+				**WARNING**
+I've tested this a little for general use cases (read: what I need it to do),
+but haven't gotten around to any corner cases yet. Make backups before use and
+proceed with caution!
+
 =======================
 * Batch Image Removal *
 =======================
@@ -100,12 +126,8 @@ files:
   - admin/index.php
   - admin/left_menu.php
 
-				**WARNING**
-I've only tested this script for deletion based on tags. I believe there is a
-bug where cached search results are not being deleted, but that might just be
-a result of using the script before it was in its current state.
 
-Remove lots of images based on one of these:
+Remove lots of posts based on one of these properties:
   *Tags
   *ID
   *Parent ID
@@ -118,6 +140,11 @@ You can also specify all of a given image's child posts. Just put the string
 When taking input from the tags or title fields you can use wildcards just like
 when searching from the front page. An asterisk (*) represents any number
 characters while a question mark (?) represents any one character.
+
+				**WARNING**
+I've only tested this script for deletion based on tags. I believe there is a
+bug where cached search results are not being deleted, but that might just be
+a result of using the script before it was in its current state.
 
 ==========================
 * Alias Editing/Deletion *
@@ -139,3 +166,8 @@ Allows site administrators to easily delete aliases or change their status.
   - admin/alias.php
     *Fixed table column headers ('Alias' was the header for the tag column and
     vice versa)
+
+  - classes/tag.class.php
+    *When incrementing or decrementing a tag's entry in the tag_index table,
+    a second argument can be given specifying the quantity by which to change
+    the index count

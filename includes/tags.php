@@ -112,6 +112,7 @@
 	if(isset($_GET['category']) && $_GET['category'] == "generic") $category_field .= " selected='selected'";
 	$category_field .= ">Generic</option>";
 	while($row = $result->fetch_assoc()) {
+		if($row['category_name'] == 'generic') continue;
 		$category_field .= "<option value='".$row['category_name']."'";
 		if(isset($_GET['category']) && $_GET['category'] == $row['category_name'])
 			$category_field .= "selected='selected'";

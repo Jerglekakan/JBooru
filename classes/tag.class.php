@@ -8,7 +8,7 @@
 		{
 			if($qt <= 0)
 				return;
-			global $db, $tag_index_table;
+			global $db, $tag_index_table, $tag_category_table;
 			$tag = $db->real_escape_string($tag);
 			if($tag != "")
 			{
@@ -31,7 +31,7 @@
 		
 		function deleteindextag($tag, $qt = 1)
 		{
-			global $db, $tag_index_table;
+			global $db, $tag_index_table, $tag_category_table;
 			$tag = $db->real_escape_string($tag);
 			if($tag != "")
 			{
