@@ -11,6 +11,7 @@
 	$processed_files = 0;
 	$uploaded_files = 0;
 	$rejected_files = 0;
+	$skipped_files = 0;
 	$i = 0;
 	
 	function getTagString($tagString) {
@@ -25,42 +26,33 @@
 	//Recursively scan directory for folders. Exclude . and ..
 	function rScanDir($scanMe) {
 		global $path, $tmpPath, $cur_folder, $tags2;
-		//echo "Now Scanning ".$scanMe."<br/>";
 		foreach($scanMe as $folder)
 		{
-			//echo "&nbsp;&nbsp;&nbsp;&nbsp;Found File: ".$folder."&nbsp;&nbsp;==>".$path.$tmpPath.$folder;
 			if(is_dir($path.$tmpPath.$folder) && $folder !="." && $folder !="..")
 			{
 				$cur_folder[] = $tmpPath.$folder;
-				//echo "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$path.$tmpPath.$folder.": added to folder array<br/>";
+				echo "getTagString input:".$tmpPath.$folder."<br/>";
 				$tags2[] = getTagString($tmpPath.$folder);
 				$tmpPath .= $folder."/";
-				//echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Temp path changed to: ".$tmpPath."<br/>";
 				rScanDir(scandir($path.$tmpPath));
 			}
 		}
-		//echo "tmpPath:".$tmpPath."<br/>substr:".substr($tmpPath, 0, strrpos($tmpPath, "/"))."<br/>";
 		$tmpPath = substr($tmpPath, 0, strrpos($tmpPath, "/"));
 		$tmpPath = substr($tmpPath, 0, strrpos($tmpPath, "/")+1);
 	}
 	rScanDir($folders);
-	//Process files directly in $path
 	$cur_folder[] = ".";
-	/*echo "Printing the folders array<br/>";
-	print_r($cur_folder);
-	echo "<br/>Printing the tags array<br/>";
-	print_r($tags2);
-	echo "<br/><br/>";*/
-
 	foreach($cur_folder as $current_folder)
 	{
 		//Check for images in folder and add them one by one.
 		$files = scandir($path.$current_folder);
 		foreach($files as $file)
 		{
-			$extension = explode(".",$file);
+			if($file == "." || $file == ".." || is_dir($path.$current_folder.'/'.$file)) continue;
+			$extension = substr(strrchr($file, '.'), 1);
+			$extension = strtolower($extension);
 			print "<strong>$file</strong><br/>";
-			if($extension['1'] == "jpg" || $extension['1'] == "jpeg" || $extension['1'] == "png" || $extension['1'] == "bmp" || $extension['1'] == "gif" || $extension['1'] == "JPG")
+			if($extension == "jpg" || $extension == "jpeg" || $extension == "png" || $extension == "bmp" || $extension == "gif")
 			{
 				$uploaded_image = false;
 				$processed_files++;
@@ -86,10 +78,10 @@
 					if(isset($_POST['title']))
 						$title = $db->real_escape_string(htmlentities($_POST['title'],ENT_QUOTES,'UTF-8'));
 					else
-						$title = $file;
+						$title = $db->real_escape_string(htmlentities($file,ENT_QUOTES,'UTF-8'));
 					$tags = strtolower($db->real_escape_string(str_replace('%','',htmlentities($tags2[$i],ENT_QUOTES,'UTF-8'))));
 					$ttags = explode(" ",$tags);
-					$tag_count = count($ttags);		
+					$tag_count = count($ttags);
 					if($tag_count == 0)
 						$ttags[] = "tagme";
 					if($tag_count < 5 && strpos($ttags,"tagme") === false)
@@ -149,7 +141,9 @@
 						print "Thumbnail generation failed! A serious error occured and the image could not be resized.<br /><br />";
 					if(!$db->query($query))
 					{
-						print "failed to upload image.";
+						print "<span style='color: rgb(255,0,0)'>failed to upload image.</span><br/>
+						SQL Error: ".$db->error."<br/>
+						File Hash (md5):".md5_file($path.$current_folder.'/'.$file)."<br/>";
 						unlink("./images/".$iinfo[0]."/".$iinfo[1]);
 						$image->folder_index_decrement($iinfo[0]);
 						$ttags = explode(" ",$tags);
@@ -192,9 +186,10 @@
 				}
 				else
 				{
+					$iinfo = explode(":",$iinfo);
 					$rejected_files++;
 					print "<span style=\"color: rgb(255, 0, 0);\">getRemoteImage() failed, file not uploaded</span><br/>
-					Error: ".$error;
+					Error: ".$error."File Hash (md5): ".md5_file($path.$current_folder.'/'.$file)."<br/>";
 				}
 				print "Tags | ".$tags2[$i];
 				print "<br><br>";
@@ -202,11 +197,13 @@
 			else
 			{
 				print "<span style=\"color: rgb(255, 0, 0);\">Invalid Extension</span><br/><br/>";
+				$skipped_files++;
 			}
 		}
 		$i++;
 	}
-	print "<hr>Images found:".$processed_files."<br/>".
-	"Images successfully uploaded:".$uploaded_files."<br/>".
-	"Images failed:".$rejected_files;
+	print "<hr>Images found:$processed_files<br/>
+	Images successfully uploaded:$uploaded_files<br/>
+	Images failed:$rejected_files<br/>
+	Images skipped (invalid extension):$skipped_files";
 ?>

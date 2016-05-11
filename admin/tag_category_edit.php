@@ -5,7 +5,7 @@
 
 	if(isset($_GET['tag']) && isset($_GET['category']))
 	{
-		$tag = urlencode($db->real_escape_string($_GET['tag']));
+		$tag = $db->real_escape_string(htmlentities($_GET['tag'], ENT_QUOTES, 'UTF-8'));
 		$query = "SELECT category from $tag_index_table WHERE tag = '$tag'";
 		if($debug) echo "$query<br/>";
 		$result = $db->query($query) or die($db->error);
@@ -35,7 +35,7 @@
 				$db->query($query) or die($db->error);
 				echo "Tag category changed successfully<br/><a href='?page=tag_category_change'>Go Back</a>";
 			} else {
-				echo "Tag category change unsucessful<br/><a href='?page=tag_category_change'>Go Back</a>;";
+				echo "Tag category change <strong>unsucessful!</strong><br/><a href='?page=tag_category_change'>Go Back</a>";
 			}
 		}
 	}
