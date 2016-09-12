@@ -138,7 +138,7 @@
 					if(!is_dir("./thumbnails/".$iinfo[0]."/"))
 						$image->makethumbnailfolder($iinfo[0]);
 					if(!$image->thumbnail($iinfo[0]."/".$iinfo[1]))
-						print "Thumbnail generation failed! A serious error occured and the image could not be resized.<br /><br />";
+						print "Thumbnail generation failed! A serious error occured and the image could not be resized.<br />";
 					if(!$db->query($query))
 					{
 						print "<span style='color: rgb(255,0,0)'>failed to upload image.</span><br/>
