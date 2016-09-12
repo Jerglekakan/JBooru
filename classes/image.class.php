@@ -168,6 +168,29 @@
 		function getremoteimage($url)
 		{
 			global $min_upload_width, $min_upload_height, $max_upload_width, $max_upload_height;
+			$mem_limit = ini_get('memory_limit');
+			if($mem_limit == -1) {
+				$fh = fopen('/proc/meminfo', 'r');
+				while($line = fgets($fh)) {
+					if (preg_match('/^MemTotal:\s+(\d+)\skB$/', $line, $pieces)) {
+						$mem_limit = $pieces[1] * 1024;
+						break;
+				    }
+				}
+				fclose($fh);
+			}
+			else if (preg_match('/^(\d+)(.)$/', $mem_limit, $matches)) {
+			    if ($matches[2] == 'G') {
+				$mem_limit = $matches[1] * 1024 * 1024 * 1024; // nnnG -> nnn GB
+			    } else if ($matches[2] == 'M') {
+				$mem_limit = $matches[1] * 1024 * 1024; // nnnM -> nnn MB
+			    } else if ($matches[2] == 'K') {
+				$mem_limit = $matches[1] * 1024; // nnnK -> nnn KB
+			    }
+			}
+			$mem_cutoff = 1048576;  //Stop fread() when the current memory usage gets within ~1MB of the limit
+						//Not doing this for any particular reason, just don't like the idea of getting
+						//close to the memory limit since exceeding it is a fatal error
 			$misc = new misc();
 			if($url == "" || $url == " ")
 				return false;
@@ -186,7 +209,16 @@
 				if($f == "")
 					return false;
 				while(!feof($f))
-					$data .= fread($f,4096); 
+				{
+					if($mem_limit - (memory_get_usage() + $mem_cutoff) > 4096) {
+						$data .= fread($f,4096); 
+					} else {
+						fclose($f);
+						unset($data);
+						$this->error = "Image too large. Memory limit reached!<br/>";
+						return false;
+					}
+				}
 				fclose($f);
 				if($dl_count == 0)
 				{				
