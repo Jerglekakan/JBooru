@@ -87,7 +87,7 @@
 				}
 				if($display_result_set)
 				{
-					echo "Your regex will result in operation on these posts<br/>".
+					echo "Your regex will result in operation on these ".count($image_set)." posts<br/>".
 					print_r($image_set, true)."<br/><br/>".
 					"<a href=\"index.php?page=tag_ops\">Back to form page</a>";
 					exit();
@@ -168,7 +168,7 @@
 		}
 		else
 		{
-			echo "Will operate on these posts:<br/>".print_r($image_set, true);
+			echo "Will operate on these ".count($image_set)." posts:<br/>".print_r($image_set, true);
 			echo "<br/><br/>";
 		}
 	}
@@ -213,7 +213,7 @@
 			{
 				$db->query($query);
 				$qt = $db->affected_rows;
-				print "\"$cur_tag\" tag added to ".$qt." posts<br/>";
+				print "\"$cur_tag\" tag added to ".$qt." posts<br/><a href=\"index.php?page=tag_ops\">Go Back</a>";
 				$tclass->addindextag($cur_tag, $qt);
 			}
 		}
@@ -256,7 +256,7 @@
 			{
 				$db->query($query);
 				$qt = $db->affected_rows;
-				print "\"$cur_tag\" tag removed from ".$qt." posts<br/>";
+				print "\"$cur_tag\" tag removed from ".$qt." posts<br/><a href=\"index.php?page=tag_ops\">Go Back</a>";
 				$tclass->deleteindextag($cur_tag, $qt);
 			}
 		}
@@ -265,7 +265,7 @@
 	{
 		$losetag = $db->real_escape_string(htmlentities($_GET['replace_tags'], ENT_QUOTES, 'UTF-8'));
 		$newtag = $db->real_escape_string(htmlentities($_GET['new_tags'], ENT_QUOTES, 'UTF-8'));
-		if(substr($losetag, " ") != FALSE || substr($newtag, " ") != FALSE)
+		if(strstr($losetag, " ") != FALSE || strstr($newtag, " ") != FALSE)
 		{
 			echo "<strong>When replacing one tag with another, neither of the input fields can contain a space</strong><br/>";
 			exit;

@@ -163,6 +163,8 @@ Allows site administrators to easily delete aliases or change their status.
     *Fixed bug when getting extension of file with multiple periods
     *Changed error message when image is present in deleted images table
     *Added error message for files containing HTML
+    *Added safeguard to getremoteimage() function to stop fatal memory errors
+     for fuckhuge images
 
   - classes/search.classes.php
     *Searches that don't have a parent: parameter will no longer hide children

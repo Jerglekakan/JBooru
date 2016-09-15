@@ -16,17 +16,9 @@ Default tags for new uploads
   *per user
   *per IP?
 
-Test batch tag operations
-
-Test batch remove script
-
 
 BUGFIXES:
   - admin/alias.php
     *Cannot approve aliases that contain a single quote (')
   - classes/image.class.php
     *Cannot create thumbnails for .bmp images
-    *Currently php crashes on line 189 (inside getremoteimage()) when dealing 
-    with fuckhuge images, need to do sanity check on image size before entering
-    the while loop, or check how much memory is currently allocated every with
-    each iteration and see if we're approaching the limit
