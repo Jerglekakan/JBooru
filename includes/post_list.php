@@ -5,12 +5,37 @@
 	$page_limit = 10;
 	require "includes/header.php";
 	$cache = new cache();
+	$user = new user();
 	$domain = $cache->select_domain();
 ?>
 <script type="text/javascript">
 //<![CDATA[
-var posts = {}; var pignored = {};
+var posts = {}; var pignored = {}; var showing_IDs = false;
 //]]>
+
+function toggleIDs() {
+	var thing, elements, i;
+	if(showing_IDs) {
+		elements = document.getElementsByClassName('postID');
+		for(i = 0; i < elements.length; i++) {
+			elements[i].style.visibility = "hidden";
+		}
+		showing_IDs = false;
+	} else {
+		elements = document.getElementsByClassName('postID');
+		for(i = 0; i < elements.length; i++) {
+			elements[i].style.visibility = "visible";
+		}
+		showing_IDs = true;
+	}
+}
+
+function copyMe(node) {
+	var rng = document.createRange();
+	rng.selectNode(node);
+	window.getSelection().addRange(rng);
+	document.execCommand('copy');
+}
 </script>
 <div id="content"><div id="post-list">
 <div class="sidebar">
@@ -150,7 +175,10 @@ var posts = {}; var pignored = {};
 				//<![CDATA[
 				posts['.$row['id'].'] = {\'tags\':\''.strtolower(str_replace('\\',"&#92;",str_replace("'","&#039;",$tags))).'\'.split(/ /g), \'rating\':\''.$row['rating'].'\', \'score\':'.$row['score'].', \'user\':\''.str_replace('\\',"&#92;",str_replace(' ','%20',str_replace("'","&#039;",$row['owner']))).'\'}
 				//]]>
-				</script></span>'; 
+				</script>';
+				if($user->gotpermission('admin_panel'))
+					$images .= '<br/><span class="postID" onClick="copyMe(this);">'.$row['id'].'</span>'; 
+				$images .= "</span>";
 				++$tcount;
 			}
 			$result->free_result();	
@@ -207,5 +235,5 @@ var posts = {}; var pignored = {};
 		}
 	}
 ?>
-</div><div id="footer"><a href="index.php?page=post&amp;s=add">Add</a> | <a href="help/">Help</a></div><br /><br />
+</div><div id="footer"><a href="index.php?page=post&amp;s=add">Add</a> | <a href="help/">Help</a><?php if($user->gotpermission('admin_panel')) echo ' | <a href="#" onClick="toggleIDs();">Show IDs</a>'?></div><br /><br />
 </div></div></div></body></html>

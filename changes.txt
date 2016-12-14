@@ -178,3 +178,8 @@ Allows site administrators to easily delete aliases or change their status.
   - admin/alias.php
     *Fixed table column headers ('Alias' was the header for the tag column and
     vice versa)
+
+  - includes/post_list.php
+    *Each post now has its ID under the image. They're invisible by default,
+    but the "Show IDs" link at the bottom of the page toggles their visibility.
+    Clicking on an ID will highlight it and copy it to the clipboard.

@@ -91,15 +91,21 @@
 		$tmp_arr = explode(" ", $db->real_escape_string($_GET['images']));
 		$image_set = array();
 		$parent_ids = array();
+		if($debug)
+			echo "Image IDs provided:<br/>";
 		foreach($tmp_arr as $thing)
 		{
+			if($debug)
+				echo "<b>$thing</b><br/>";
 		        if(($ofst = strpos($thing, '-')) !== false)
 		        {
 		                $range = explode("-", $thing);
 		                $start = (int) $range[0];
 		                $end = (int) $range[1];
+				if($debug)
+					echo "Adding images $start through $end<br/><br/>";
 		                foreach(range($start, $end) as $num)
-		                        $tmp_arr[] = $num;
+		                        $image_set[] = $num;
 		        }
 			else if(($ofst = strpos($thing, 'parent:')) !== false)
 			{
@@ -126,10 +132,14 @@
 		}
 		foreach($image_set as $thing)
 		{
-			if($thing === end($image_set))
-				$where_clause .= "id = $thing)";
-			else
+			if($thing === end($image_set)) {
+				$where_clause .= "id = $thing";
+				if($_GET['by'] != 'ID')
+					$where_clause .= ')';
+			}
+			else {
 				$where_clause .= "id = $thing OR ";
+			}
 		}
 	}
 	
