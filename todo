@@ -22,3 +22,6 @@ BUGFIXES:
     *Cannot approve aliases that contain a single quote (')
   - classes/image.class.php
     *Cannot create thumbnails for .bmp images
+  - MISC
+    *When deleting posts, set the parent field of any child posts to null
+    *'Next Post' field is always set to the most recent image id
