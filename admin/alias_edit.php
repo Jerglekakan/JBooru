@@ -122,7 +122,7 @@
 		while($row = $result->fetch_assoc())
 		{
 			echo "<tr><td>".$row['alias']."</td><td>".$row['tag']."</td><td>".$row['status']."</td>".
-			"<td><a href=\"?page=alias_edit&action=edit&alias=".$row['alias']."&tag=".$row['tag']."&status=".$row['status']."\">Edit</a>,&nbsp;".
+			"<td><a href=\"?page=alias_edit&action=edit&alias=".urlencode($row['alias'])."&tag=".urlencode($row['tag'])."&status=".urlencode($row['status'])."\">Edit</a>,&nbsp;".
 			"<a href=\"?page=alias_edit&action=delete&alias=".$row['alias']."&tag=".$row['tag']."\">Delete</a></td></tr>";
 		}
 		if($result->num_rows <= 0)
