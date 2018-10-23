@@ -1,4 +1,4 @@
-The source code for version 0.1.9 of [Gelbooru](https://gelbooru.com) was publicly released in December 2008, but I found it was missing a few features present in the version used by the site itself and have added them here as well as some others that I have a need for. The only files this repository are ones I created myself or ones from the version [0.1.11](https://gelbooru.com/index.php?page=forum&s=view&id=99&pid=0) package I have modified to expand gelbooru's feature set, though I might add the rest of the contents of that package to this repository in the future.
+The source code for version 0.1.9 of [Gelbooru](https://gelbooru.com) was publicly released in December 2008, but I found it was missing a few features present in the version used by the site itself and have added them here as well as some others that I have a need for. The only files in this repository are ones I created myself or ones from the version [0.1.11](https://gelbooru.com/index.php?page=forum&s=view&id=99&pid=0) package I have modified to expand gelbooru's feature set, though I might add the rest of the contents of that package to this repository in the future.
 
 ## Installation
 
@@ -35,10 +35,10 @@ Example:
 
 #### Other
 
-* A searchable tag listing page that also shows many posts have each tag and the tag's category
+* A searchable tag listing page that also shows how many posts have each tag and the tag's category
 * When viewing parent posts, a link to its children will be displayed and vice versa
 * A page in the admin interface that allows for the deletion of aliases
-* Search queries with no `parent` field no longer hide child posts
+* Search queries with no parent field no longer hide child posts
 * Fixed the column headers for the alias page
 * When logged in as an admin, searches will include a link at the bottom that will display every post's ID underneath its thumbnail. Clicking an ID will automatically highlight it and copy it to the OS's clipboard
 
@@ -53,6 +53,14 @@ Example:
   * score
 * Default tags for new uploads
   * allow for user specific tags
+* Parent and child tags
+  * Adding a child tag to a post will automatically add its parent tag as well
+* Tag pairs
+  * Indicates a connection between two (or more) tags to further refine search capabilities without having to add millions of tags
+  * Example: 
+* Allow logical OR in searches
+* Change `tag_ops.php` to not regex against image dimension. Probably going to have to add some extra fields to the form to allow them as search parameters.
+* Make showing/hiding child posts in searches configurable
 
 #### Bugs
 
