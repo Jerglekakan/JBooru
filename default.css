@@ -4,7 +4,9 @@
   padding: 0;
 }
 
-
+.postID {
+  visibility: hidden;
+}
 
 body {
   font: 80% verdana, sans-serif;

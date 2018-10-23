@@ -306,7 +306,7 @@
 		{
 			$db->query($query);
 			$qt = $db->affected_rows;
-			print "\"$losetag\" tag replaced with \"$newtag\" in $qt posts<br/>";
+			print "\"$losetag\" tag replaced with \"$newtag\" in $qt posts<br/><a href=\"index.php?page=tag_ops\">Go Back</a>";
 			$tclass->deleteindextag($losetag, $qt);
 			$tclass->addindextag($newtag, $qt);
 		}
