@@ -130,15 +130,29 @@
 					$ext = $tmp_ext;
 				}
 				if($ext == ".jpg" || $ext == ".jpeg")
+				{
 					$img = imagecreatefromjpeg($image);
+				}
 				else if($ext == ".gif")
+				{
 					$img = imagecreatefromgif($image);
+				}
 				else if($ext == ".png")
+				{
 					$img = imagecreatefrompng($image);
+				}
 				else if($ext == ".bmp")
-					$img = $this->imagecreatefrombmp($image);
+				{
+					$version = explode('.', PHP_VERSION);
+					if($version[0] >= 7 && $version[1] >= 2)
+						$img = imagecreatefrombmp($image);
+					else
+						$img = $this->imagecreatefrombmp($image);
+				}
 				else
+				{
 					return false;
+				}
 				
 				if($img == NULL)
 					return false;

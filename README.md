@@ -2,7 +2,7 @@ The source code for version 0.1.9 of [Gelbooru](https://gelbooru.com) was public
 
 ## Installation
 
-Use of these features requires an already working installation of Gelbooru. Add the files from this repository to the top level of the Gelbooru installation directory (the directory structure is mimicked in this repository, so make sure to merge directories when copying) and execute the tag category upgrade script.
+Use of these features requires an already working installation of Gelbooru. Add the files from this repository to the Gelbooru installation directory (making sure to merge directories when copying) and execute the tag category upgrade script.
 
 ## Features
 
@@ -30,8 +30,7 @@ Some pages have been added to the admin interface allowing tag operations to be 
 
 Posts for these operations are selected by specifying IDs or evaluating a regular expression against a post's metadata (such as its tags, title, or source). Post IDs can be specified individually or as part of an inclusive range by inputting the two bounds of the range with a hyphen seperating them.
 
-Example:
-  489 732 590 400-450 789
+Example: `489 732 590 400-450 789`
 
 #### Other
 
@@ -56,17 +55,16 @@ Example:
 * Parent and child tags
   * Adding a child tag to a post will automatically add its parent tag as well
 * Tag pairs
-  * Indicates a connection between two (or more) tags to further refine search capabilities without having to add millions of tags
-  * Example: 
+  * Indicates a connection between two (or more) tags to further refine search capabilities without having to add millions of tags for every unique combination
+  * Example: `character1 pair:(character2 top_hat)` - Returns every image with the 3 tags and with character2 specifically wearing a top hat
 * Allow logical OR in searches
-* Change `tag_ops.php` to not regex against image dimension. Probably going to have to add some extra fields to the form to allow them as search parameters.
+* Change `tag_ops.php` to not regex against image dimensions. Probably going to have to add some extra fields to the form to allow them as search parameters.
 * Make showing/hiding child posts in searches configurable
+* When deleting posts, set the parent field of any child posts to null
 
 #### Bugs
 
 * admin/alias.php
   * cannot approve aliases that contain a single quote (')
 * classes/image.class.php
-  * cannot create thumbnails for .bmp images
-* misc
-  * When deleting posts, set the parent field of any child posts to null
+  * private createfrombmp function cannot create thumbnails for some .bmp images
