@@ -149,6 +149,10 @@
 					else
 						$img = $this->imagecreatefrombmp($image);
 				}
+				else if($ext == ".webp")
+				{
+					$img = imagecreatefromwebp($image);
+				}
 				else
 				{
 					return false;
@@ -172,6 +176,8 @@
 					imagepng($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name);
 				else if($ext == ".bmp")
 					imagejpeg($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name,95);
+				else if($ext == ".webp")
+					imagewebp($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name,95);
 				else
 					return false;
 				imagedestroy($img);
@@ -210,7 +216,7 @@
 				return false;
 			$ext = substr(strrchr($url, '.'), 1);
 			$ext = strtolower($ext);
-			if($ext != "jpg" && $ext != "jpeg" && $ext != "gif" && $ext != "png" && $ext != "bmp")
+			if($ext != "jpg" && $ext != "jpeg" && $ext != "gif" && $ext != "png" && $ext != "bmp" && $ext != "webp")
 				return false;
 			$ext = ".".$ext;
 			$valid_download = false;
@@ -356,7 +362,7 @@
 			$count = count($ext);
 			$ext = $ext[$count-1];
 			$ext = strtolower($ext);
-			if($ext != "jpg" && $ext != "jpeg" && $ext != "gif" && $ext != "png" && $ext != "bmp") { $this->error = "Not the right extension";
+			if($ext != "jpg" && $ext != "jpeg" && $ext != "gif" && $ext != "png" && $ext != "bmp" && $ext != "webp") { $this->error = "Not the right extension";
 				return false;}
 			$ext = ".".$ext;
 			$fname = hash('sha1',hash_file('md5',$upload['tmp_name']));
@@ -370,7 +376,7 @@
 			fclose($f);
 			if(preg_match("#<script|<html|<head|<title|<body|<pre|<table|<a\s+href|<img|<plaintext#si", $data) == 1)
 			{	
-				$this->error = "ummm.... I don't know what this means";
+				$this->error = "found HTML in file";
 				unlink("./tmp/".$fname.$ext);
 				return false;
 			}
@@ -525,13 +531,17 @@
 			$tmp_md5_sum = md5_file($file);
 			$query = "SELECT id FROM $post_table WHERE hash='$tmp_md5_sum'";
 			$result = $db->query($query);
-			$row = $result->fetch_assoc();
-			$i = $row['id'];
+			if($row = $result->fetch_assoc())
+				$i = $row['id'];
+			else
+				$i = null;
 			
 			$query = "SELECT COUNT(*) FROM $deleted_image_table WHERE hash='$tmp_md5_sum'";
 			$result = $db->query($query);
-			$row = $result->fetch_assoc();
-			$count = $row['COUNT(*)'];
+			if($row = $result->fetch_assoc())
+				$count = $row['COUNT(*)'];
+			else
+				$count = 0;
 			
 			//print $tmp_md5_sum;
 			if($i != "" && $i != NULL)
