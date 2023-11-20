@@ -54,6 +54,8 @@
 		{
 			$col = $db->real_escape_string($_GET['regex_against']);
 			$regex = $db->real_escape_string($_GET['images']);
+			$regex = str_replace("(", "\\\\(", $regex);
+			$regex = str_replace(")", "\\\\)", $regex);
 			if(array_search($col, $regex_fields) !== false)
 				$query .= "$col REGEXP '$regex';";
 			else
@@ -213,10 +215,11 @@
 			{
 				$db->query($query);
 				$qt = $db->affected_rows;
-				print "\"$cur_tag\" tag added to ".$qt." posts<br/><a href=\"index.php?page=tag_ops\">Go Back</a>";
+				print "\"$cur_tag\" tag added to ".$qt." posts<br/>";
 				$tclass->addindextag($cur_tag, $qt);
 			}
 		}
+		print "<a href=\"index.php?page=tag_ops\">Go Back</a>";
 	}
 	else if($_GET['action'] == "remove")
 	{
@@ -256,10 +259,11 @@
 			{
 				$db->query($query);
 				$qt = $db->affected_rows;
-				print "\"$cur_tag\" tag removed from ".$qt." posts<br/><a href=\"index.php?page=tag_ops\">Go Back</a>";
+				print "\"$cur_tag\" tag removed from ".$qt." posts<br/>";
 				$tclass->deleteindextag($cur_tag, $qt);
 			}
 		}
+		print "<a href=\"index.php?page=tag_ops\">Go Back</a>";
 	}
 	else if($_GET['action'] == "replace")
 	{
