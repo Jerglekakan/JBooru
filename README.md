@@ -56,4 +56,6 @@ Example: `489 732 590 400-450 789`
 * A page in the admin interface that allows for the deletion of aliases
 * Child posts are no longer hidden by default
 * Fixed the column headers for the alias page
+* Fixed the `previous` link when viewing an image
 * When logged in as an admin, searches will include a link at the bottom that will display every post's ID underneath its thumbnail. Clicking an ID will automatically highlight it and copy it to to your computer's clipboard
+* Added `.webp` support
