@@ -14,8 +14,9 @@
 					Category name <input type='text' name='category'/><br/>
 					<input type='Submit' name='Submit' value='Submit'/>";
 				} else if($_GET['confirm'] == 1) {
+					$param = strtolower($_GET['category']);
 					$statement = $db->prepare("INSERT INTO `$tag_category_table`(category_name,tag_count) VALUES (?,0)");
-					$statement->bind_param('s', $_GET['category']);
+					$statement->bind_param('s', $param);
 					$statement->execute();
 					header("Location: $site_url/admin/?page=tag_categories");
 				}
@@ -49,7 +50,7 @@
 		<th>Tags in category</th>
 		<th>Actions</th></tr>';
 		while($row = $result->fetch_assoc()) {
-			print '<tr><td>'.$row['category_name'].'</td><td>'.$row['category_name'].'</td><td>'.$row['tag_count'].'</td>';
+			print '<tr><td>'.$row['category_name'].'</td><td><a href="#" class="'.$row['category_name'].'">'.$row['category_name'].'</td><td>'.$row['tag_count'].'</td>';
 			if($row['category_name'] != 'generic')
 				echo '<td><a href="?page=tag_categories&action=delete&category='.$row['category_name'].'">Delete</a></td>';
 			echo '</tr>';
