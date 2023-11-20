@@ -8,17 +8,17 @@ This repository includes all v0.1.11 [updates](https://gelbooru.com/index.php?pa
 
 ## Installation
 
-If you have a pre-existing Gelbooru installation, simply copy the repository files over to the installation folder and run any necessary scripts in 'upgrades'.
+If you have a pre-existing Gelbooru installation, simply copy the repository files over to the installation folder and run any necessary scripts in `upgrades`.
 
 Otherwise, you will need the following packages/software:
 
-* PHP v
+* PHP
 * MySQL
 
-Once the requirements have been met, follow the steps outlined in [install/Readme.txt](install/Readme.txt). Additionaly, you may want to
+Any version from the past, like, 15 years should be suitable. Once you have installed those, follow the steps outlined in [install/Readme.txt](install/Readme.txt). Additionaly, you may want to
 
-* Adjust 'max_execution_time' and 'max_input_time' in your php.ini config file so the batch add script is not stopped prematurely
-* Adjust 'upload_max_filesize' in your php.ini config file to allow for larger uploads
+* Adjust `max_execution_time` and `max_input_time` in your php.ini config file so the batch add script is not stopped prematurely
+* Adjust `upload_max_filesize` in your php.ini config file to allow for larger uploads
 
 ## Features
 
@@ -32,10 +32,10 @@ Tag categories can be created and deleted via a page added to the admin interfac
 
 The `batch_add.php` script, which allows for the mass importing of large a quantity of images that are stored on the server but have not been added to the database, has been modified to be fully recursive. It searches the (configurable) directory `import` located in the same directory as the script and adds all images to the database. Every directory that the script encounters will have its name treated as a full tag and that tag will be added to every image inside that directory and its children.
 
-For this feature you are advised to use the following php.ini config values:
+For this feature you are advised to use the following `php.ini` config values:
 
-* 'max_execution_time = 0'
-* 'max_input_time = -1'
+* `max_execution_time = 0`
+* `max_input_time = -1`
 
 #### Batch Tag Operations
 
