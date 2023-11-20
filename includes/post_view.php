@@ -45,6 +45,8 @@
 		$categories = array();
 		foreach($ttags as $ctag)
 		{
+			if(!strlen($ctag))
+				continue;
 			$query = "SELECT category from $tag_index_table WHERE tag='".htmlentities($ctag, ENT_QUOTES, 'UTF-8')."' LIMIT 1";
 			$result = $db->query($query);
 			$row = $result->fetch_assoc();
@@ -99,9 +101,12 @@
 			}
 			echo "<br/>";
 		}
-		echo "<h5>Tags</h5>";
+		if(count($ttags) > 0)
+			echo "<h5>Tags</h5>";
 		foreach($ttags as $current)
 		{
+			if(!strlen($current))
+				continue;
 			$count = $post->index_count($current);
 			echo '<li><span style="color: #a0a0a0;">? <a href="index.php?page=post&amp;s=list&amp;tags='.$current.'" class="'.$categories[$current].'">'.str_replace('_',' ',$current)."</a> ".$count['index_count']."</span></li>";
 		}
@@ -126,7 +131,7 @@
 			';
 		}
 		
-		echo '<img alt="img" src="f6ca1c7d5d00a2a3fb4ea2f7edfa0f96a6d09c11717f39facabad2d724f16fbb/images/'.$post_data['directory'].'/'.$post_data['image'].'" id="image" onclick="Note.toggle();" style="margin-right: 70px;"/><br />Posted on '.$post_data['creation_date'].' by  <a href="index.php?page=account_profile&amp;uname='.$post_data['owner'].'">'.$post_data['owner'].'</a><br /><p id="note-count"></p>
+		echo '<a href="f6ca1c7d5d00a2a3fb4ea2f7edfa0f96a6d09c11717f39facabad2d724f16fbb/images/'.$post_data['directory'].'/'.$post_data['image'].'"><img alt="img" src="f6ca1c7d5d00a2a3fb4ea2f7edfa0f96a6d09c11717f39facabad2d724f16fbb/images/'.$post_data['directory'].'/'.$post_data['image'].'" id="image" onclick="Note.toggle();" style="margin-right: 70px;"/></a><br />Posted on '.$post_data['creation_date'].' by  <a href="index.php?page=account_profile&amp;uname='.$post_data['owner'].'">'.$post_data['owner'].'</a><br /><p id="note-count"></p>
 		<script type="text/javascript">
 		//<![CDATA[
 		Note.post_id = '.$id.';';
