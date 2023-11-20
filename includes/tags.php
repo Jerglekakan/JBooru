@@ -143,7 +143,7 @@
 	while($row = $result->fetch_assoc())
 	{
 		echo "<tr>
-			<td>".$row['tag']."</td>
+			<td><a class='".$row['category']."' href='$site_url?page=post&s=list&tags=".urlencode($row['tag'])."'>".$row['tag']."</a></td>
 			<td>".$row['index_count']."</td>
 			<td>".$row['category']."</td>
 		</tr>";
@@ -192,10 +192,10 @@
 				$istop = $cur_page+6;
 		}
 		$base_link = "?page=tags";
-		if(isset($_GET['order'])) $base_link .= "&order=$query_order";
-		if(isset($_GET['sort'])) $base_link .= "&sort=$order_by";
-		if(isset($_GET['results'])) $base_link .= "&results=$tag_limit";
-		if(isset($_GET['category'])) $base_link .= "&category=$cat";
+		if(isset($_GET['order'])) $base_link .= "&order=".$_GET['order'];
+		if(isset($_GET['sort'])) $base_link .= "&sort=".$_GET['sort'];
+		if(isset($_GET['results'])) $base_link .= "&results=".$_GET['results'];
+		if(isset($_GET['category'])) $base_link .= "&category=".$_GET['category'];
 		if(isset($_GET['tags']))
 			$base_link .= "&tags=".str_replace(' ', '+', htmlentities($_GET['tags'], ENT_QUOTES, 'UTF-8'));
 
