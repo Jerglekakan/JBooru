@@ -29,9 +29,11 @@
 <body>
 	<div id="header">
 		<h2><a href="'.$site_url.'index.php">'.$site_url3.'</a></h2>
-				<ul class="flat-list" id="navbar">
+				<ul class="flat-list" id="navbar">';
 
-			<li><a href="'.$site_url.'index.php?page=account">My Account</a></li>
+			if(isset($user) && $user->gotpermission('admin_panel'))
+				echo '<li><a href="'.$site_url.'admin/" style="color: red;">Admin</a></li>';
+			echo '<li><a href="'.$site_url.'index.php?page=account">My Account</a></li>
 			<li><a href="'.$site_url.'index.php?page=post&amp;s=list&amp;tags=all">Posts</a></li>
 			<li><a href="'.$site_url.'index.php?page=comment&amp;s=list">Comments</a></li>
 			<li><a href="'.$site_url.'index.php?page=alias&amp;s=list">Alias</a></li>
@@ -40,4 +42,5 @@
 			<li><a href="'.$site_url.'index.php?page=post&amp;s=random">Random</a></li>
 			<li><a href="'.$site_url.'help/index.php">Help</a></li>
 ';
+
 ?><li id="notice"></li></ul></div><div id="long-notice"></div>
