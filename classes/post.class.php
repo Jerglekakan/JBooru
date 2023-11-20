@@ -29,7 +29,7 @@
 			$result = $db->query($query);
 			$row = $result->fetch_assoc();
 			$prev_next[] = $row['id'];
-			$query = "SELECT SQL_NO_CACHE id FROM $post_table WHERE id > $id ORDER BY id DESC LIMIT 1";
+			$query = "SELECT SQL_NO_CACHE id FROM $post_table WHERE id > $id ORDER BY id ASC LIMIT 1";
 			$result = $db->query($query);
 			$row = $result->fetch_assoc();
 			$prev_next[] = $row['id'];
