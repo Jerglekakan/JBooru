@@ -47,6 +47,8 @@
 			else
 				$uploaded_image = true;
 		}
+		else if($_FILES['upload']['error'] == 1)
+			print "<br />Image exceeds filesize limit.";
 		else
 			print "No image given for upload.";
 		if($uploaded_image == true)
