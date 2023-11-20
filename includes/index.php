@@ -3,8 +3,9 @@
 	<head>
 <?php
 	echo '<title>'.$site_url3.'</title>
-	<link rel="stylesheet" type="text/css" media="screen" href="'.$site_url.'/default.css?2" title="default" />
+	<link rel="stylesheet" type="text/css" media="screen" href="'.$site_url.'/default.css" title="default" />
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link rel="search" type="application/opensearchdescription+xml" title="'.$site_url3.'" href="'.$site_url.'/gelbooru.xml" />
 	</head>
 	<body>
 	<div id="static-index">
@@ -14,6 +15,7 @@
 	<div class="space" id="links">
 		<a href="index.php?page=post&amp;s=list" title="A paginated list of every post">Posts</a>
 		<a href="index.php?page=comment&amp;s=list">Comments</a>
+		<a href="index.php?page=tags&amp;s=list">Tags</a>
 		<a href="index.php?page=reg">Register</a>
 		<a href="index.php?page=favorites&amp;s=list">Favorites</a>
 	</div>
@@ -31,7 +33,7 @@
 	$query = "SELECT t1.pcount, t2.count FROM $post_count_table AS t1 JOIN $hit_counter_table as t2 WHERE t1.access_key='posts'";
 	$result = $db->query($query);
 	$row = $result->fetch_assoc();
-	echo 'Serving '.number_format($row['pcount']).' posts  -  Running <a href="http://gelbooru.com/">Gelbooru</a> Beta 0.1.11
+	echo 'Serving '.number_format($row['pcount']).' posts  -  Running <a href="https://github.com/Jerglekakan/JBooru" rel="noreferrer">JBooru</a>
 	</p><br />';
 	for ($i=0;$i<strlen($row['pcount']);$i++) 
 	{
