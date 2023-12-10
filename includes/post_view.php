@@ -108,7 +108,7 @@
 			if(!strlen($current))
 				continue;
 			$count = $post->index_count($current);
-			echo '<li><span style="color: #a0a0a0;">? <a href="index.php?page=post&amp;s=list&amp;tags='.$current.'" class="'.$categories[$current].'">'.str_replace('_',' ',$current)."</a> ".$count['index_count']."</span></li>";
+			echo '<li><span style="color: #a0a0a0;">? <a href="index.php?page=post&amp;s=list&amp;tags='.htmlentities($current).'" class="'.$categories[$current].'">'.str_replace('_',' ',$current)."</a> ".$count['index_count']."</span></li>";
 		}
 		echo '<li><br /><br /><br /><br /><br /><br /><br /><br /></li></ul></div></div>';
 		if($post_data['title'] != "")
