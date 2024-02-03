@@ -128,11 +128,19 @@
 
 			$ip = $db->real_escape_string($_SERVER['REMOTE_ADDR']);
 			$isinfo = getimagesize("./images/".$iinfo[0]."/".$iinfo[1]);
+			if($ext == ".svg")
+			{
+				$isinfo[0] = 0;
+				$isinfo[1] = 0;
+			}
 			$query = "INSERT INTO $post_table(creation_date, hash, image, title, owner, height, width, ext, rating, tags, directory, source, active_date, ip) VALUES(NOW(), '".md5_file("./images/".$iinfo[0]."/".$iinfo[1])."', '".$iinfo[1]."', '$title', '$user', '".$isinfo[1]."', '".$isinfo[0]."', '$ext', '$rating', '$tags', '".$iinfo[0]."', '$source', '".date("Ymd")."', '$ip')";
-			if(!is_dir("./thumbnails/".$iinfo[0]."/"))
-				$image->makethumbnailfolder($iinfo[0]);
-			if(!$image->thumbnail($iinfo[0]."/".$iinfo[1]))
-				print "Thumbnail generation failed! A serious error occured and the image could not be resized.<br /><br />";
+			if($ext != ".svg")
+			{
+				if(!is_dir("./thumbnails/".$iinfo[0]."/"))
+					$image->makethumbnailfolder($iinfo[0]);
+				if(!$image->thumbnail($iinfo[0]."/".$iinfo[1]))
+					print "Thumbnail generation failed! A serious error occured and the image could not be resized.<br /><br />";
+			}
 			if(!$db->query($query))
 			{
 				print "failed to upload image."; print $query;

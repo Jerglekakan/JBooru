@@ -112,77 +112,85 @@
 
 		 return $res;
 		}
+
+		function imagecreatefromwebm($filename)
+		{
+		}
 		
 		function thumbnail($image)
 		{
-				$timage = explode("/",$image);
-				$image = $timage[1]; 
-				$ext = explode(".",$image);
-				$count = count($ext);
-				$ext = $ext[$count-1];
-				$ext = ".".$ext;
-				$thumbnail_name = "thumbnail_".$image;
-				$image = "./".$this->image_path."/".$timage[0]."/".$image;
-				$imginfo = getimagesize($image);
-				$tmp_ext = ".".str_replace("image/","",$imginfo['mime']);
-				if($tmp_ext != $ext)
-				{
-					$ext = $tmp_ext;
-				}
-				if($ext == ".jpg" || $ext == ".jpeg")
-				{
-					$img = imagecreatefromjpeg($image);
-				}
-				else if($ext == ".gif")
-				{
-					$img = imagecreatefromgif($image);
-				}
-				else if($ext == ".png")
-				{
-					$img = imagecreatefrompng($image);
-				}
-				else if($ext == ".bmp")
-				{
-					$version = explode('.', PHP_VERSION);
-					if($version[0] >= 7 && $version[1] >= 2)
-						$img = imagecreatefrombmp($image);
-					else
-						$img = $this->imagecreatefrombmp($image);
-				}
-				else if($ext == ".webp")
-				{
-					$img = imagecreatefromwebp($image);
-				}
+			$timage = explode("/",$image);
+			$image = $timage[1]; 
+			$ext = explode(".",$image);
+			$count = count($ext);
+			$ext = $ext[$count-1];
+			$ext = ".".$ext;
+			$thumbnail_name = "thumbnail_".$image;
+			$image = "./".$this->image_path."/".$timage[0]."/".$image;
+			$imginfo = getimagesize($image);
+			$tmp_ext = ".".str_replace("image/","",$imginfo['mime']);
+			if($tmp_ext != $ext)
+			{
+				$ext = $tmp_ext;
+			}
+			if($ext == ".jpg" || $ext == ".jpeg")
+			{
+				$img = imagecreatefromjpeg($image);
+			}
+			else if($ext == ".gif")
+			{
+				$img = imagecreatefromgif($image);
+			}
+			else if($ext == ".png")
+			{
+				$img = imagecreatefrompng($image);
+			}
+			else if($ext == ".bmp")
+			{
+				$version = explode('.', PHP_VERSION);
+				if($version[0] >= 7 && $version[1] >= 2)
+					$img = imagecreatefrombmp($image);
 				else
-				{
-					return false;
-				}
-				
-				if($img == NULL)
-					return false;
-					
-				$imginfo = getimagesize($image);
-				$max = ($imginfo[0] > $imginfo[1]) ? $imginfo[0] : $imginfo[1];
-				$scale = ($max < $this->dimension) ? 1 : $this->dimension / $max;
-				$width = $imginfo[0] * $scale;
-				$height = $imginfo[1] * $scale;
-				$thumbnail = imagecreatetruecolor($width,$height);
-				imagecopyresampled($thumbnail,$img,0,0,0,0,$width,$height,$imginfo[0],$imginfo[1]);
-				if($ext == ".jpg" || $ext == ".jpeg")
-					imagejpeg($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name,95);
-				else if($ext == ".gif")
-					imagegif($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name);
-				else if($ext == ".png")
-					imagepng($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name);
-				else if($ext == ".bmp")
-					imagejpeg($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name,95);
-				else if($ext == ".webp")
-					imagewebp($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name,95);
-				else
-					return false;
-				imagedestroy($img);
-				imagedestroy($thumbnail);
+					$img = $this->imagecreatefrombmp($image);
+			}
+			else if($ext == ".webp")
+			{
+				$img = imagecreatefromwebp($image);
+			}
+			else if($ext == ".svg")
+			{
 				return true;
+			}
+			else
+			{
+				return false;
+			}
+			
+			if($img == NULL)
+				return false;
+				
+			$imginfo = getimagesize($image);
+			$max = ($imginfo[0] > $imginfo[1]) ? $imginfo[0] : $imginfo[1];
+			$scale = ($max < $this->dimension) ? 1 : $this->dimension / $max;
+			$width = $imginfo[0] * $scale;
+			$height = $imginfo[1] * $scale;
+			$thumbnail = imagecreatetruecolor($width,$height);
+			imagecopyresampled($thumbnail,$img,0,0,0,0,$width,$height,$imginfo[0],$imginfo[1]);
+			if($ext == ".jpg" || $ext == ".jpeg")
+				imagejpeg($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name,95);
+			else if($ext == ".gif")
+				imagegif($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name);
+			else if($ext == ".png")
+				imagepng($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name);
+			else if($ext == ".bmp")
+				imagejpeg($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name,95);
+			else if($ext == ".webp")
+				imagewebp($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name,95);
+			else
+				return false;
+			imagedestroy($img);
+			imagedestroy($thumbnail);
+			return true;
 		}
 		
 		function getremoteimage($url)
@@ -216,7 +224,7 @@
 				return false;
 			$ext = substr(strrchr($url, '.'), 1);
 			$ext = strtolower($ext);
-			if($ext != "jpg" && $ext != "jpeg" && $ext != "gif" && $ext != "png" && $ext != "bmp" && $ext != "webp")
+			if($ext != "jpg" && $ext != "jpeg" && $ext != "gif" && $ext != "png" && $ext != "bmp" && $ext != "webp" && $ext != "webm" && $ext != "svg")
 				return false;
 			$ext = ".".$ext;
 			$valid_download = false;
@@ -275,7 +283,7 @@
 			$cdir = $this->getcurrentfolder();
 			if(!is_dir("./images/".$cdir."/"))
 				$this->makefolder($cdir);
-			if(preg_match("#<script|<html|<head|<title|<body|<pre|<table|<a\s+href|<img|<plaintext#si", $data) == 1)
+			if($ext != "svg" && preg_match("#<script|<html|<head|<title|<body|<pre|<table|<a\s+href|<img|<plaintext#si", $data) == 1)
 			{
 				$this->error = "Found HTML embedded in file!<br/>";
 				return false;
@@ -362,7 +370,7 @@
 			$count = count($ext);
 			$ext = $ext[$count-1];
 			$ext = strtolower($ext);
-			if($ext != "jpg" && $ext != "jpeg" && $ext != "gif" && $ext != "png" && $ext != "bmp" && $ext != "webp") { $this->error = "Not the right extension";
+			if($ext != "jpg" && $ext != "jpeg" && $ext != "gif" && $ext != "png" && $ext != "bmp" && $ext != "webp" && $ext != "svg") { $this->error = "Not the right extension";
 				return false;}
 			$ext = ".".$ext;
 			$fname = hash('sha1',hash_file('md5',$upload['tmp_name']));
@@ -374,18 +382,21 @@
 			while(!feof($f))
 				$data .= fread($f,4096);
 			fclose($f);
-			if(preg_match("#<script|<html|<head|<title|<body|<pre|<table|<a\s+href|<img|<plaintext#si", $data) == 1)
-			{	
-				$this->error = "found HTML in file";
-				unlink("./tmp/".$fname.$ext);
-				return false;
-			}
-			$iinfo = getimagesize("./tmp/".$fname.$ext);
-			if(substr($iinfo['mime'],0,5) != "image" || $iinfo[0] < $min_upload_width && $min_upload_width != 0 || $iinfo[0] > $max_upload_width && $max_upload_width != 0 || $iinfo[1] < $min_upload_height && $min_upload_height != 0 || $iinfo[1] > $max_upload_height && $max_upload_height != 0 || !$this->checksum("./tmp/".$fname.$ext))
+			if($ext != ".svg")
 			{
-				$this->error = "or this";
-				unlink("./tmp/".$fname.$ext);
-				return false;
+				if(preg_match("#<script|<html|<head|<title|<body|<pre|<table|<a\s+href|<img|<plaintext#si", $data) == 1)
+				{	
+					$this->error = "found HTML in file";
+					unlink("./tmp/".$fname.$ext);
+					return false;
+				}
+				$iinfo = getimagesize("./tmp/".$fname.$ext);
+				if(substr($iinfo['mime'],0,5) != "image" || $iinfo[0] < $min_upload_width && $min_upload_width != 0 || $iinfo[0] > $max_upload_width && $max_upload_width != 0 || $iinfo[1] < $min_upload_height && $min_upload_height != 0 || $iinfo[1] > $max_upload_height && $max_upload_height != 0 || !$this->checksum("./tmp/".$fname.$ext))
+				{
+					$this->error = "or this";
+					unlink("./tmp/".$fname.$ext);
+					return false;
+				}
 			}
 			$ffname = $fname;
 			$cdir = $this->getcurrentfolder();
