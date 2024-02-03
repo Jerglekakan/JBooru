@@ -24,6 +24,8 @@
 			return true;
 		else if($ext == "bmp")
 			return true;
+		else if($ext == "webp")
+			return true;
 		else
 			return false;
 	}
