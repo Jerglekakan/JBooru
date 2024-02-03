@@ -19,6 +19,7 @@ Any version from the past, like, 15 years should be suitable. Once you have inst
 
 * Adjust `max_execution_time` and `max_input_time` in your php.ini config file so the batch add script is not stopped prematurely
 * Adjust `upload_max_filesize` in your php.ini config file to allow for larger uploads
+* Adjust the URLs in `gelbooru.xml` and `gelbooru.src` to point to your web server
 
 ## Features
 
