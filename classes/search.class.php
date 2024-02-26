@@ -19,6 +19,7 @@
 			$g_owner = '';
 			$g_tags = '';
 			$g_parent = '';
+			$g_score = '';
 			
 			foreach($ttags as $current)
 			{
@@ -63,6 +64,24 @@
 							}
 							else
 								$g_owner = " AND owner = '$owner'";
+						}
+						else if(strpos(strtolower($current),'score:')  !== false)
+						{
+							$score = str_replace('score:','',$current);
+							$score = htmlspecialchars_decode($score);
+							$op = substr($score,0,1);
+							switch ($op)
+							{
+								case '<':
+								case '>':
+								case '=':
+									$score = substr($score, 1);
+									break;
+								default:
+									$op = '=';
+							}
+							$score = (int) $score;
+							$g_score = " AND score $op $score";
 						}
 						else
 						{
@@ -131,13 +150,13 @@
 			if($g_tags != "")
 			{
 				if($g_parent != "")
-					$parent_patch = "OR (MATCH(tags) AGAINST('$g_tags' IN BOOLEAN MODE)>0.9) $parent $g_owner $g_rating";
+					$parent_patch = "OR (MATCH(tags) AGAINST('$g_tags' IN BOOLEAN MODE)>0.9) $parent $g_owner $g_score $g_rating";
 				else
 					//$parent_patch = " AND parent='0'";
 					$parent_patch = "";
-				$query = "SELECT id, image, directory, score, rating, tags, owner FROM $post_table WHERE (MATCH(tags) AGAINST('$g_tags' IN BOOLEAN MODE)>0.9) $g_parent $g_owner $g_rating $parent_patch ORDER BY id DESC";
+				$query = "SELECT id, image, directory, score, rating, tags, owner FROM $post_table WHERE (MATCH(tags) AGAINST('$g_tags' IN BOOLEAN MODE)>0.9) $g_parent $g_owner $g_score $g_rating $parent_patch ORDER BY id DESC";
 			}
-			else if($g_parent != "" || $g_owner != "" || $g_rating != "")
+			else if($g_parent != "" || $g_owner != "" || $g_score != "" || $g_rating != "")
 			{
 				if($g_parent != "")
 				{
@@ -147,11 +166,13 @@
 				}				
 				else if($g_owner != "")
 					$g_owner = str_replace('AND',"",$g_owner);
+				else if($g_score != "")
+					$g_score = str_replace('AND',"",$g_score);
 				else if($g_rating != "")
 					$g_rating = substr($g_rating,4,strlen($g_rating));
 				if($g_parent == "")
 					$parent_patch = " AND parent='0'";
-				$query = "SELECT id, image, directory, score, rating, tags, owner FROM $post_table WHERE $g_parent $g_owner $g_rating $parent_patch ORDER BY id DESC";			
+				$query = "SELECT id, image, directory, score, rating, tags, owner FROM $post_table WHERE $g_parent $g_owner $g_score $g_rating $parent_patch ORDER BY id DESC";			
 			}
 			else
 			{
