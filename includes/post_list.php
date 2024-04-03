@@ -239,5 +239,5 @@ function copyMe(node) {
 		}
 	}
 ?>
-</div><div id="footer"><a href="index.php?page=post&amp;s=add">Add</a> | <a href="help/">Help</a><?php if($user->gotpermission('admin_panel')) echo ' | <a href="#" onClick="toggleIDs();">Show IDs</a>'?></div><br /><br />
+</div><div id="footer"><a href="index.php?page=post&amp;s=add">Add</a> | <a href="help/">Help</a> | <a href="#" onClick="toggleIDs();">Show IDs</a></div><br /><br />
 </div></div></div></body></html>

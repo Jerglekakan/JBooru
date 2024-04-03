@@ -58,6 +58,7 @@ Example: `489 732 590 400-450 789`
 * Child posts are no longer hidden by default
 * Fixed the column headers for the alias page
 * Fixed the `previous` link when viewing an image
-* When logged in as an admin, searches will include a link at the bottom that will display every post's ID underneath its thumbnail. Clicking an ID will automatically highlight it and copy it to to your computer's clipboard
+* Added `Show IDs` link to searchs that will display every post's ID underneath its thumbnail. Clicking an ID will automatically highlight it and copy it to to your computer's clipboard
+* Post IDs are displayed beneath their title
 * Added `.webp` and `.svg` support
 * Added score searching (credit [iKonKur](https://github.com/iKonKur))
