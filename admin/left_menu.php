@@ -1,6 +1,7 @@
 <?php
 echo '<html><head>
 <link rel="stylesheet" type="text/css" media="screen" href="'.$site_url.'default.css" title="default" />
+<link rel="stylesheet" type="text/css" media="screen" href="'.$site_url.'categories.css" title="default" />
 <title></title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 </head>
