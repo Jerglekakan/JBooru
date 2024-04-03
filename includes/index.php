@@ -4,6 +4,7 @@
 <?php
 	echo '<title>'.$site_url3.'</title>
 	<link rel="stylesheet" type="text/css" media="screen" href="'.$site_url.'/default.css" title="default" />
+	<link rel="stylesheet" type="text/css" media="screen" href="'.$site_url.'/categories.css" title="default" />
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link rel="search" type="application/opensearchdescription+xml" title="'.$site_url3.'" href="'.$site_url.'/gelbooru.xml" />
 	</head>

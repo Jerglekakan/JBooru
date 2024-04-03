@@ -25,7 +25,7 @@ Any version from the past, like, 15 years should be suitable. Once you have inst
 
 ### Tag Categories
 
-Tags can now be assigned to a category, thereby setting them apart from generic tags when viewing posts. When viewing a single post, tags of the same category will be grouped together, seperately from uncategorized tags, and will be colored differently if outlined that way in the site's stylesheet. When viewing multiple posts, tags will __NOT__ be grouped together by category, but they will be colored appropriately.
+Tags can now be assigned to a category, thereby setting them apart from generic tags when viewing posts. When viewing a single post, tags of the same category will be grouped together, seperately from uncategorized tags, and will be colored differently as outlined in the new file `categories.css`. When viewing multiple posts, tags will __NOT__ be grouped together by category, but they will be colored appropriately.
 
 Tag categories can be created and deleted via a page added to the admin interface, but the category's css style must be manually added to the stylesheet. The stylesheet in this repository includes the styles used on Gelbooru.com for the Artist, Copyright, and Character categories.
 

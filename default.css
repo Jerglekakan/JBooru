@@ -77,36 +77,6 @@ a.help {
   background: #E6E6E6;
 }
 
-a.character:link, a.character:visited, a.character:active {
-  color: #00AA00;
-  text-decoration: none;
-}
-
-a.character:hover{
-  color: #66BB66;
-  text-decoration: none;
-}
-
-a.copywright:link, a.copywright:visited, a.copywright:active {
-  color: #B800B8;
-  text-decoration: none;
-}
-
-a.copywright:hover {
-  color: #BA66BA;
-  text-decoration: none;
-}
-
-a.artist:link, a.artist:visited, a.artist:active {
-  color: #AA0000;
-  text-decoration: none;
-}
-
-a.artist:hover {
-  color: #B66;
-  text-decoration: none;
-}
-
 .link {
   color: #006FFA;
   background: none;

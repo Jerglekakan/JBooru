@@ -1,0 +1,29 @@
+a.character:link, a.character:visited, a.character:active {
+  color: #00AA00;
+  text-decoration: none;
+}
+
+a.character:hover{
+  color: #66BB66;
+  text-decoration: none;
+}
+
+a.copyright:link, a.copyright:visited, a.copyright:active {
+  color: #B800B8;
+  text-decoration: none;
+}
+
+a.copyright:hover {
+  color: #BA66BA;
+  text-decoration: none;
+}
+
+a.artist:link, a.artist:visited, a.artist:active {
+  color: #AA0000;
+  text-decoration: none;
+}
+
+a.artist:hover {
+  color: #B66;
+  text-decoration: none;
+}
