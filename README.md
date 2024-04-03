@@ -23,13 +23,13 @@ Any version from the past, like, 15 years should be suitable. Once you have inst
 
 ## Features
 
-#### Tag Categories
+### Tag Categories
 
 Tags can now be assigned to a category, thereby setting them apart from generic tags when viewing posts. When viewing a single post, tags of the same category will be grouped together, seperately from uncategorized tags, and will be colored differently if outlined that way in the site's stylesheet. When viewing multiple posts, tags will __NOT__ be grouped together by category, but they will be colored appropriately.
 
 Tag categories can be created and deleted via a page added to the admin interface, but the category's css style must be manually added to the stylesheet. The stylesheet in this repository includes the styles used on Gelbooru.com for the Artist, Copyright, and Character categories.
 
-#### Recursive Image Import
+### Recursive Image Import
 
 The `batch_add.php` script, which allows for the mass importing of large a quantity of images that are stored on the server but have not been added to the database, has been modified to be fully recursive. It searches the (configurable) directory `import` located in the same directory as the script and adds all images to the database. Every directory that the script encounters will have its name treated as a full tag and that tag will be added to every image inside that directory and its children.
 
@@ -38,7 +38,7 @@ For this feature you are advised to use the following `php.ini` config values:
 * `max_execution_time = 0`
 * `max_input_time = -1`
 
-#### Batch Tag Operations
+### Batch Tag Operations
 
 Some pages have been added to the admin interface allowing tag operations to be done on large groups of posts. Operations include
 
@@ -50,7 +50,7 @@ Posts for these operations are selected by specifying IDs or evaluating a regula
 
 Example: `489 732 590 400-450 789`
 
-#### Other
+### Other
 
 * A searchable tag listing page that also shows how many posts have each tag and the tag's category
 * When viewing a parent image, a link to its children will be displayed and vice versa
@@ -60,3 +60,4 @@ Example: `489 732 590 400-450 789`
 * Fixed the `previous` link when viewing an image
 * When logged in as an admin, searches will include a link at the bottom that will display every post's ID underneath its thumbnail. Clicking an ID will automatically highlight it and copy it to to your computer's clipboard
 * Added `.webp` and `.svg` support
+* Added score searching (credit [iKonKur](https://github.com/iKonKur))

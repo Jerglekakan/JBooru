@@ -11,17 +11,36 @@
 <div class="section">
 	<h4>Search</h4>
 	<p>Searching for posts is straightforward. Simply enter the tags you want to search for, separated by spaces. For example, searching for <code>original panties</code> will return every post that has both the original tag <strong>AND</strong> the panties tag.</p>
+
+	<h5>Search parameters</h5>
+	<p>In addition to searching for tags, you can search by the following post properties:</p>
+	<dl>
+
+		<dt>parent</dt>
+		<dd>Add <code>parent:&lt;id&gt;</code> to show all of the given post's children. A post's ID is displayed beneath its title.</dd>
+
+		<dt>rating</dt>
+		<dd><code>rating:&lt;rating&gt;</code>. See <a href="ratings.php">ratings help page</a>.</dd>
+
+		<dt>user/uploader</dt>
+		<dd>Add <code>user:&lt;username&gt;</code> to show all posts uploaded by the given user.</dd>
+
+		<dt>score</dt>
+		<dd>Add <code>score:&lt;number&gt;</code> to search for posts with that exact score. Adding &gt; or &lt; after the colon will show posts with a score above or below the given value.</dd>
+	</dl>
 </div>
   
 <div class="section">
 	<h4>Tag List</h4>
-    <p>In both the listing page and the show page you'll notice a list of tag links with characters next to them. Here's an explanation of what they do: (Currently removed)</p>
+	<strong>Example</strong><br/>
+	<img src="taglinks.png" style="border-color:#ccc;border-width:9px;border-style:solid;" />
+    <p>In both the listing page and the show page you'll notice a list of tag links with characters next to them. Here's an explanation of what the characters do:</p>
     <dl>
       
-      <dt>+</dt>
+      <dt>plus (+)</dt>
       <dd>This adds the tag to the current search.</dd>
 
-      <dt>&ndash;</dt>
+      <dt>minus (&ndash;)</dt>
       <dd>This adds the negated tag to the current search.</dd>
            
       <dt>950</dt>

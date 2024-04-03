@@ -3,7 +3,6 @@
 * Search posts by other properties
   * title
   * comment count
-  * score
 * Parent and child tags
   * Adding a child tag to a post will automatically add its parent tag as well
 * Tag pairs

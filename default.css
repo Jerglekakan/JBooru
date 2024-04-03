@@ -192,6 +192,8 @@ legend {
 code {
   font-family: monospace;
   font-size: 1.2em;
+  background-color: #ccc;
+  padding: 2px;
 }
 
 table {
@@ -911,7 +913,7 @@ ul.news li {
 }
 
 div.help {
-  width: 40em;
+  width: 41em;
   margin-top: 2em;
 }
 
@@ -926,6 +928,10 @@ div.help div.section div.section {
 div.help h4 {
   margin-bottom: 0.5em;
   color: #060;
+}
+
+div.help h5 {
+  font-size: 1.1em;
 }
 
 div.help h1, div.help h2, div.help h3, div.help h4 {
