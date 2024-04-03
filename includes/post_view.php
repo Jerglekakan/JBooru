@@ -95,7 +95,7 @@
 							$spec_tag[$i] = strtoupper($spec_tag[$i]);
 					}
 				echo '<li><span style="color: #a0a0a0;">? '.
-				'<a href="index.php?page=post&amp;s=list&amp;tags='.$spec_tag.'" class="'.$cat.'">'.
+				'<a href="index.php?page=post&amp;s=list&amp;tags='.urlencode($spec_tag).'" class="'.$cat.'">'.
 					ucwords(str_replace('_',' ', $spec_tag)).
 				"</a> ".$count['index_count']."</span></li>";
 			}
