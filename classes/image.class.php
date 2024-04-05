@@ -697,6 +697,7 @@
 				$this->extension = "";
 				return false;
 			}
+			return true;
 		}
 
 		function validext($url)

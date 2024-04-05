@@ -55,7 +55,7 @@
 			}
 			if ($item != '.' && $item != '..' && !is_dir($dir.$item) && is_valid_extension($item) && !file_exists($thumb)) 
 			{
-				print "<br/>$image_folder/$current/$item<br/>thumb: $thumb<br/>";
+				print "<br/><a href='$image_folder/$current/$item'>$image_folder/$current/$item</a><br/>thumb: $thumb<br/>";
 				$image = new image();
 				if(!$image->load("./$image_folder/$current/$item"))
 				{
@@ -68,7 +68,7 @@
 				if( $image->thumbnail($current."/".$item) )
 				{
 					$new_count++;
-					print "<span style='color:green'>$thumb</span><br><br/>";
+					print "<span style='color:green'>$thumb</span>&nbsp;<a href='$thumb'>link</a><br><br/>";
 				}
 				else
 				{
