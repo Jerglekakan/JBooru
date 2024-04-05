@@ -4,6 +4,10 @@
 		private $image_path;
 		private $thumbnail_path;
 		private $dimension;
+		private $width;
+		private $height;
+		private $extension;
+		private $mime;
 		public $error;
 		function __construct()
 		{
@@ -13,6 +17,10 @@
 			$this->image_path = $image_folder;
 			$this->thumbnail_path = $thumbnail_folder;
 			$this->dimension = $dimension;
+			$width = 0;
+			$height = 0;
+			$extension = "";
+			$mime = "";
 		}
 		function ImageCreateFromBMP($filename)
 		{
@@ -113,89 +121,106 @@
 		 return $res;
 		}
 
-		function imagecreatefromwebm($filename)
+		function imagecreatefromvideo($filename)
 		{
+			$command = "ffmpeg -i $filename -vf thumbnail=300 -frames:v 1 -c:v png -f rawvideo -";
+			ob_start();
+			if(passthru($command) !== null)
+			{
+				ob_end_clean();
+				print "ffmpeg failed<br/>";
+				return null;
+			}
+			$c = ob_get_contents();
+			ob_end_clean();
+			if(strlen($c) == 0)
+			{
+				print "No output from ffmpeg<br/>";
+				return null;
+			}
+			$img = imagecreatefromstring($c);
+			if($img === false)
+			{
+				print "imagecreatefromstring() failed<br/>";
+				return null;
+			}
+			return $img;
 		}
 		
 		function thumbnail($image)
 		{
 			$timage = explode("/",$image);
-			$image = $timage[1]; 
-			$ext = explode(".",$image);
-			$count = count($ext);
-			$ext = $ext[$count-1];
-			$ext = ".".$ext;
-			$thumbnail_name = "thumbnail_".$image;
-			$image = "./".$this->image_path."/".$timage[0]."/".$image;
-			$imginfo = getimagesize($image);
-			$tmp_ext = ".".str_replace("image/","",$imginfo['mime']);
-			if($tmp_ext != $ext)
-			{
-				$ext = $tmp_ext;
-			}
+			$bucket = $timage[0];
+			$fname = $timage[1]; 
+			$ext = strrchr($fname, ".");
+			$thumbnail_name = "thumbnail_".$fname;
 			if($ext == ".jpg" || $ext == ".jpeg")
 			{
-				$img = imagecreatefromjpeg($image);
+				$img = imagecreatefromjpeg($fname);
 			}
 			else if($ext == ".gif")
 			{
-				$img = imagecreatefromgif($image);
+				$img = imagecreatefromgif($fname);
 			}
 			else if($ext == ".png")
 			{
-				$img = imagecreatefrompng($image);
+				$img = imagecreatefrompng($fname);
 			}
 			else if($ext == ".bmp")
 			{
 				$version = explode('.', PHP_VERSION);
 				if($version[0] >= 7 && $version[1] >= 2)
-					$img = imagecreatefrombmp($image);
+					$img = imagecreatefrombmp($fname);
 				else
-					$img = $this->imagecreatefrombmp($image);
+					$img = $this->ImageCreateFromBMP($fname);
 			}
 			else if($ext == ".webp")
 			{
-				$img = imagecreatefromwebp($image);
+				$img = imagecreatefromwebp($fname);
 			}
 			else if($ext == ".svg")
 			{
 				return true;
 			}
+			else if($ext == ".webm" || $ext == ".mp4")
+			{
+				$thumbnail_name = substr($thumbnail_name, 0, strrpos($thumbnail_name, "."));
+				$thumbnail_name = $thumbnail_name.".png";
+				$img = $this->imagecreatefromvideo("./".$this->image_path."/".$bucket."/".$fname);
+			}
 			else
 			{
 				return false;
 			}
-			
-			if($img == NULL)
+			if($img === NULL)
 				return false;
 				
-			$imginfo = getimagesize($image);
-			$max = ($imginfo[0] > $imginfo[1]) ? $imginfo[0] : $imginfo[1];
+			$max = ($this->width > $this->height) ? $this->width : $this->height;
 			$scale = ($max < $this->dimension) ? 1 : $this->dimension / $max;
-			$width = $imginfo[0] * $scale;
-			$height = $imginfo[1] * $scale;
+			$width = $this->width * $scale;
+			$height = $this->height * $scale;
 			$thumbnail = imagecreatetruecolor($width,$height);
-			imagecopyresampled($thumbnail,$img,0,0,0,0,$width,$height,$imginfo[0],$imginfo[1]);
+			imagecopyresampled($thumbnail,$img,0,0,0,0,$width,$height,$this->width,$this->height);
+			$ret = "";
 			if($ext == ".jpg" || $ext == ".jpeg")
-				imagejpeg($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name,95);
+				$ret = imagejpeg($thumbnail,"./".$this->thumbnail_path."/".$bucket."/".$thumbnail_name,95);
 			else if($ext == ".gif")
-				imagegif($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name);
-			else if($ext == ".png")
-				imagepng($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name);
+				$ret = imagegif($thumbnail,"./".$this->thumbnail_path."/".$bucket."/".$thumbnail_name);
+			else if($ext == ".png" || $ext == ".webm" || $ext == ".mp4")
+				$ret = imagepng($thumbnail,"./".$this->thumbnail_path."/".$bucket."/".$thumbnail_name);
 			else if($ext == ".bmp")
-				imagejpeg($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name,95);
+				$ret = imagejpeg($thumbnail,"./".$this->thumbnail_path."/".$bucket."/".$thumbnail_name,95);
 			else if($ext == ".webp")
-				imagewebp($thumbnail,"./".$this->thumbnail_path."/".$timage[0]."/".$thumbnail_name,95);
+				$ret = imagewebp($thumbnail,"./".$this->thumbnail_path."/".$bucket."/".$thumbnail_name,95);
 			else
 				return false;
 			imagedestroy($img);
 			imagedestroy($thumbnail);
-			return true;
+			return $ret;
 		}
 		
 		function getremoteimage($url)
 		{
-			global $min_upload_width, $min_upload_height, $max_upload_width, $max_upload_height;
 			$mem_limit = ini_get('memory_limit');
 			if($mem_limit == -1) {
 				$fh = fopen('/proc/meminfo', 'r');
@@ -220,13 +245,9 @@
 						//Not doing this for any particular reason, just don't like the idea of getting
 						//close to the memory limit since exceeding it is a fatal error
 			$misc = new misc();
-			if($url == "" || $url == " ")
+			if($url == "" || $url == " " || !$this->validext($url))
 				return false;
-			$ext = substr(strrchr($url, '.'), 1);
-			$ext = strtolower($ext);
-			if($ext != "jpg" && $ext != "jpeg" && $ext != "gif" && $ext != "png" && $ext != "bmp" && $ext != "webp" && $ext != "webm" && $ext != "svg")
-				return false;
-			$ext = ".".$ext;
+			$ext = ".".$this->extension;
 			$valid_download = false;
 			$dl_count = 0;
 			$name = basename($url);
@@ -235,7 +256,10 @@
 				$data = '';
 				$f = fopen($url,"rb");
 				if($f == "")
+				{
+					$this->extension = "";
 					return false;
+				}
 				while(!feof($f))
 				{
 					if($mem_limit - (memory_get_usage() + $mem_cutoff) > 4096) {
@@ -244,6 +268,7 @@
 						fclose($f);
 						unset($data);
 						$this->error = "Image too large. Memory limit reached!<br/>";
+						$this->extension = "";
 						return false;
 					}
 				}
@@ -283,9 +308,10 @@
 			$cdir = $this->getcurrentfolder();
 			if(!is_dir("./images/".$cdir."/"))
 				$this->makefolder($cdir);
-			if($ext != "svg" && preg_match("#<script|<html|<head|<title|<body|<pre|<table|<a\s+href|<img|<plaintext#si", $data) == 1)
+			if($ext != ".svg" && preg_match("#<script|<html|<head|<title|<body|<pre|<table|<a\s+href|<img|<plaintext#si", $data) == 1)
 			{
 				$this->error = "Found HTML embedded in file!<br/>";
+				$this->extension = "";
 				return false;
 			}
 			$filename = hash('sha1',hash('md5',$url));
@@ -295,21 +321,38 @@
 				$i++;
 				$filename = hash('sha1',hash('md5',$url.$i));
 			}
-			$f = fopen("./images/".$cdir."/".$filename.$ext,"w");
+			$img = "./images/$cdir/$filename$ext";
+			$f = fopen($img,"w");
 			if($f == "")
-				return false;
-			fwrite($f,$data);
-			fclose($f);
-			$iinfo = getimagesize("./images/".$cdir."/".$filename.$ext);
-			if(substr($iinfo['mime'],0,5) != "image" || $iinfo[0] < $min_upload_width && $min_upload_width != 0 || $iinfo[0] > $max_upload_width && $max_upload_width != 0 || $iinfo[1] < $min_upload_height && $min_upload_height != 0 || $iinfo[1] > $max_upload_height && $max_upload_height != 0)
 			{
-				$this->error = "Wrong mimetype or insufficient image dimensions<br/>";
-				unlink("./images/".$cdir."/".$filename.$ext);
+				$this->extension = "";
 				return false;
 			}
-			if(!$this->checksum("./images/".$cdir."/".$filename.$ext))
+			fwrite($f,$data);
+			fclose($f);
+			if($ext == ".webm" || $ext == ".mp4")
 			{
-				unlink("./images/".$cdir."/".$filename.$ext);
+				if(!$this->validvideo($img))
+				{
+					unlink($img);
+					return false;
+				}
+			}
+			else
+			{
+				if(!$this->validimage($img))
+				{
+					unlink($img);
+					return false;
+				}
+			}
+			if(!$this->checksum($img))
+			{
+				unlink($img);
+				$this->width = 0;
+				$this->height = 0;
+				$this->mime = "";
+				$this->extension = "";
 				return false;
 			}
 			$this->folder_index_increment($cdir);
@@ -363,21 +406,29 @@
 		
 		function process_upload($upload)
 		{
-			global $min_upload_width, $min_upload_height, $max_upload_width, $max_upload_height;
-			if($upload == "") { $this->error = "upload is empty";
-				return false;}
-			$ext = explode('.',$upload['name']);
-			$count = count($ext);
-			$ext = $ext[$count-1];
-			$ext = strtolower($ext);
-			if($ext != "jpg" && $ext != "jpeg" && $ext != "gif" && $ext != "png" && $ext != "bmp" && $ext != "webp" && $ext != "svg") { $this->error = "Not the right extension";
-				return false;}
-			$ext = ".".$ext;
+			if($upload == "")
+			{
+				$this->error = "upload is empty";
+				return false;
+			}
+			if(!$this->validext($upload['name']))
+			{
+				$e = strrchr($upload['name'], ".");
+				$e = substr($e, 1);
+				$this->error = "Invalid extension: $e";
+				return false;
+			}
+			$ext = ".".$this->extension;
 			$fname = hash('sha1',hash_file('md5',$upload['tmp_name']));
 			move_uploaded_file($upload['tmp_name'],"./tmp/".$fname.$ext);
-			$f = fopen("./tmp/".$fname.$ext,"rb");
-			if($f == "") { $this->error = "fopen() has failed";
-				return false;}
+			$tmpf = "./tmp/$fname$ext";
+			$f = fopen($tmpf,"rb");
+			if($f == "")
+			{
+				$this->error = "fopen() has failed";
+				$this->extension = "";
+				return false;
+			}
 			$data = '';
 			while(!feof($f))
 				$data .= fread($f,4096);
@@ -387,14 +438,29 @@
 				if(preg_match("#<script|<html|<head|<title|<body|<pre|<table|<a\s+href|<img|<plaintext#si", $data) == 1)
 				{	
 					$this->error = "found HTML in file";
-					unlink("./tmp/".$fname.$ext);
+					unlink($tmpf);
+					$this->extension = "";
 					return false;
 				}
-				$iinfo = getimagesize("./tmp/".$fname.$ext);
-				if(substr($iinfo['mime'],0,5) != "image" || $iinfo[0] < $min_upload_width && $min_upload_width != 0 || $iinfo[0] > $max_upload_width && $max_upload_width != 0 || $iinfo[1] < $min_upload_height && $min_upload_height != 0 || $iinfo[1] > $max_upload_height && $max_upload_height != 0 || !$this->checksum("./tmp/".$fname.$ext))
+				if($ext == ".webm" || $ext == ".mp4")
 				{
-					$this->error = "or this";
-					unlink("./tmp/".$fname.$ext);
+					if(!$this->validvideo($tmpf))
+					{
+						unlink($tmpf);
+						$this->width = 0;
+						$this->height = 0;
+						$this->extension = "";
+						$this->mime = "";
+						return false;
+					}
+				}
+				else if(!$this->validimage($tmpf))
+				{
+					unlink($tmpf);
+					$this->width = 0;
+					$this->height = 0;
+					$this->extension = "";
+					$this->mime = "";
 					return false;
 				}
 			}
@@ -409,12 +475,19 @@
 				$fname = hash('sha1',hash('md5',$fname.$i));
 			}
 			$f = fopen("./images/".$cdir."/".$fname.$ext,"w");
-			if($f == "") { $this->error = "fopen() number 2 has failed";
-				return false;}
+			if($f == "")
+			{
+				$this->error = "fopen() number 2 has failed";
+				$this->width = 0;
+				$this->height = 0;
+				$this->extension = "";
+				$this->mime = "";
+				return false;
+			}
 			fwrite($f,$data);
 			fclose($f);
 			$this->folder_index_increment($cdir);
-			unlink("./tmp/".$ffname.$ext);
+			unlink($tmpf);
 			return $cdir.":".$fname.$ext;
 		}
 		
@@ -453,6 +526,8 @@
 			$result = $db->query($query);
 			$row = $result->fetch_assoc();
 			$image = $row['image'];
+			$ext = strrchr($image, ".");
+			$ext = substr($ext, 1);
 			$dir = $row['directory'];
 			$owner = $row['owner'];
 			$tags = $row['tags'];
@@ -511,7 +586,10 @@
 				$query = "UPDATE $post_table SET parent='' WHERE parent='$id'";
 				$db->query($query);
 				unlink("../images/".$dir."/".$image);
-				unlink("../thumbnails/".$dir."/thumbnail_".$image);
+				$thumb = "../thumbnails/".$dir."/thumbnail_".$image;
+				if($ext == "webm" || $ext == "mp4")
+					$thumb = substr($thumb, 0, strrpos($thumb, ".")).".png";
+				unlink($thumb);
 				$this->folder_index_decrement($dir);
 				$itag = new tag();
 				$tags = explode(" ",$tags);
@@ -573,5 +651,149 @@
 		{
 			return $this->error;
 		} 
+
+		function getw()
+		{
+			return $this->width;
+		}
+
+		function geth()
+		{
+			return $this->height;
+		}
+
+		function validimage($image)
+		{
+			global $min_upload_width, $min_upload_height, $max_upload_width, $max_upload_height;
+			$iinfo = getimagesize($image);
+			$this->width = $iinfo[0];
+			$this->height = $iinfo[1];
+			$this->mime = $iinfo['mime'];
+
+			if(substr($this->mime,0,5) != "image" && substr($this->mime,0,5) != "video")
+			{
+				$this->error = "Wrong mimetype";
+				$this->width = 0;
+				$this->height = 0;
+				$this->mime = "";
+				$this->extension = "";
+				return false;
+			}
+			if($this->width < $min_upload_width && $min_upload_width != 0 || $this->width > $max_upload_width && $max_upload_width != 0)
+			{
+				$this->error = "Invalid width";
+				$this->width = 0;
+				$this->height = 0;
+				$this->mime = "";
+				$this->extension = "";
+				return false;
+			}
+			if($this->height < $min_upload_height && $min_upload_height != 0 || $this->height > $max_upload_height && $max_upload_height != 0)
+			{
+				$this->error = "Invalid height";
+				$this->width = 0;
+				$this->height = 0;
+				$this->mime = "";
+				$this->extension = "";
+				return false;
+			}
+		}
+
+		function validext($url)
+		{
+			$ext = strrchr($url, '.');
+			$ext = substr($ext, 1);
+			$ext = strtolower($ext);
+			if($ext == "jpg" || $ext == "jpeg" || $ext == "gif" || $ext == "png" || $ext == "bmp" || $ext == "webp" || $ext == "svg" || $ext == "mp4" || $ext == "webm")
+			{
+				$this->extension = $ext;
+				return true;
+			}
+			return false;
+		}
+
+		function validvideo($video)
+		{
+			global $min_upload_width, $min_upload_height, $max_upload_width, $max_upload_height;
+			$output = [];
+			$vstream_count = 0;
+			$astream_count = 0;
+			exec("ffprobe -show_streams -pretty -loglevel quiet -i $video", $output);
+			foreach($output as $line)
+			{
+				if($line == "codec_type=video")
+					$vstream_count++;
+				else if($line == "codec_type=audio")
+					$astream_count++;
+				else if(substr($line, 0, 6) == "width=")
+					$this->width = (int)substr($line, 6);
+				else if(substr($line, 0, 7) == "height=")
+					$this->height = (int)substr($line, 7);
+			}
+			$this->mime = mime_content_type($video);
+
+			if($vstream_count != 1)
+			{
+				$this->error = "Only one video stream allowed";
+				$this->extension = "";
+				$this->width = 0;
+				$this->height = 0;
+				return false;
+			}
+			if($astream_count > 1)
+			{
+				$this->error = "No more than one audio stream allowed";
+				$this->extension = "";
+				$this->width = 0;
+				$this->height = 0;
+				return false;
+			}
+
+			if(substr($this->mime,0,5) != "image" && substr($this->mime,0,5) != "video")
+			{
+				$this->error = "Wrong mimetype";
+				$this->width = 0;
+				$this->height = 0;
+				$this->mime = "";
+				$this->extension = "";
+				return false;
+			}
+			if($this->width < $min_upload_width && $min_upload_width != 0 || $this->width > $max_upload_width && $max_upload_width != 0)
+			{
+				$this->error = "Invalid width";
+				$this->width = 0;
+				$this->height = 0;
+				$this->mime = "";
+				$this->extension = "";
+				return false;
+			}
+			if($this->height < $min_upload_height && $min_upload_height != 0 || $this->height > $max_upload_height && $max_upload_height != 0)
+			{
+				$this->error = "Invalid height";
+				$this->width = 0;
+				$this->height = 0;
+				$this->mime = "";
+				$this->extension = "";
+				return false;
+			}
+			return true;
+		}
+
+		function load($path)
+		{
+			if(!$this->validext($path))
+				return false;
+			if($this->extension == "webm" || $this->extension == "mp4")
+			{
+				if(!$this->validvideo($path))
+					return false;
+			}
+			else
+			{
+				if(!$this->validimage($path))
+					return false;
+			}
+			return true;
+		}
 	}
 ?>

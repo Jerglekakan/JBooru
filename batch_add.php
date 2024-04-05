@@ -52,7 +52,7 @@
 			$extension = substr(strrchr($file, '.'), 1);
 			$extension = strtolower($extension);
 			print "<strong>$file</strong><br/>";
-			if($extension == "jpg" || $extension == "jpeg" || $extension == "png" || $extension == "bmp" || $extension == "gif")
+			if($extension == "jpg" || $extension == "jpeg" || $extension == "png" || $extension == "bmp" || $extension == "gif" || $extension == "webp" || $extension == "webm" || $extension == "mp4")
 			{
 				$uploaded_image = false;
 				$processed_files++;
@@ -73,7 +73,7 @@
 					$iinfo = explode(":",$iinfo);
 					$tclass = new tag();
 					$misc = new misc();
-					$ext = strtolower(substr($iinfo[1],-4,10000));
+					$ext = strrchr($iinfo[1], ".");
 					$source = $db->real_escape_string(htmlentities($_POST['source'],ENT_QUOTES,'UTF-8'));
 					if(isset($_POST['title']))
 						$title = $db->real_escape_string(htmlentities($_POST['title'],ENT_QUOTES,'UTF-8'));
@@ -134,7 +134,7 @@
 					$rating = "Questionable";
 					$ip = "127.0.0.1";
 					$isinfo = getimagesize("./images/".$iinfo[0]."/".$iinfo[1]);
-					$query = "INSERT INTO $post_table(creation_date, hash, image, title, owner, height, width, ext, rating, tags, directory, source, active_date, ip) VALUES(NOW(), '".md5_file("./images/".$iinfo[0]."/".$iinfo[1])."', '".$iinfo[1]."', '$title', '$user', '".$isinfo[1]."', '".$isinfo[0]."', '$ext', '$rating', '$tags', '".$iinfo[0]."', '$source', '".date("Ymd")."', '$ip')";
+					$query = "INSERT INTO $post_table(creation_date, hash, image, title, owner, height, width, ext, rating, tags, directory, source, active_date, ip) VALUES(NOW(), '".md5_file("./images/".$iinfo[0]."/".$iinfo[1])."', '".$iinfo[1]."', '$title', '$user', '".$image->geth()."', '".$image->getw()."', '$ext', '$rating', '$tags', '".$iinfo[0]."', '$source', '".date("Ymd")."', '$ip')";
 					if(!is_dir("./thumbnails/".$iinfo[0]."/"))
 						$image->makethumbnailfolder($iinfo[0]);
 					if(!$image->thumbnail($iinfo[0]."/".$iinfo[1]))

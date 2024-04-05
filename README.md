@@ -14,12 +14,15 @@ Otherwise, you will need the following packages/software:
 
 * PHP
 * MySQL
+* ffmpeg
+* ffprobe
 
 Any version from the past, like, 15 years should be suitable. Once you have installed those, follow the steps outlined in [install/Readme.txt](install/Readme.txt). Additionaly, you may want to
 
 * Adjust `max_execution_time` and `max_input_time` in your php.ini config file so the batch add script is not stopped prematurely
 * Adjust `upload_max_filesize` in your php.ini config file to allow for larger uploads
-* Adjust the URLs in `gelbooru.xml` and `gelbooru.src` to point to your web server
+
+The `ffmpeg` and `ffprobe` commands must be accessible through your system's PATH environment variable. Unless the `avconv` lunacy makes a comeback, this shouldn't be an issue.
 
 ## Features
 
@@ -61,4 +64,5 @@ Example: `489 732 590 400-450 789`
 * Added `Show IDs` link to searchs that will display every post's ID underneath its thumbnail. Clicking an ID will automatically highlight it and copy it to to your computer's clipboard
 * Post IDs are displayed beneath their title
 * Added `.webp` and `.svg` support
+* Added `.webm` and `.mp4` video support using ffmpeg
 * Added score searching (credit [iKonKur](https://github.com/iKonKur))

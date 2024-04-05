@@ -1,5 +1,6 @@
 <?php
 	//die("Maintenance mode. please try again in 1 hour.");
+	$debug = false;
 	error_reporting(0);
 	ignore_user_abort(1);
 	$misc = new misc();
@@ -27,36 +28,60 @@
 	}
 	if(isset($_POST['submit']))
 	{
+		if($debug)
+			print "Starting...<br/>";
 		$image = new image();
 		$uploaded_image = false;
 		$parent = '';
 		$error = '';
 		if(empty($_FILES['upload']) && isset($_POST['source']) && $_POST['source'] != "" && substr($_POST['source'],0,4) == "http" || $_FILES['upload']['error'] != 0 && isset($_POST['source']) && $_POST['source'] != "" && substr($_POST['source'],0,4) == "http")
 		{
+			if($debug)
+				print "getremoteimage()...";
 			$iinfo = $image->getremoteimage($_POST['source']);
 			if($iinfo === false)
 				$error = $image->geterror()."<br />Could not add the image.";
 			else
 				$uploaded_image = true;
+			if($debug)
+			{
+				print 'finished<br/>';
+				print "return val: ".print_r($iinfo, true)."<br/>";
+				$pth = "./images/".$iinfo[0].$iinfo[1]."/".substr($iinfo, 3);
+				print "md5($pth):  ".md5_file($pth)."<br/>";
+			}
 		}
 		else if(!empty($_FILES['upload']) && $_FILES['upload']['error'] == 0)
 		{
+			if($debug)
+				print "process_upload()...";
 			$iinfo = $image->process_upload($_FILES['upload']);
 			if($iinfo === false)
 				$error = $image->geterror()."<br />An error occured. The image could not be added because it already exists or it is corrupted.";
 			else
 				$uploaded_image = true;
+			if($debug)
+			{
+				print 'finished<br/>';
+				print "return val: ".print_r($iinfo, true)."<br/>";
+				$pth = "./images/".$iinfo[0].$iinfo[1]."/".substr($iinfo, 3);
+				print "md5($pth):  ".md5_file($pth)."<br/>";
+			}
 		}
 		else if($_FILES['upload']['error'] == 1)
 			print "<br />Image exceeds filesize limit.";
 		else
 			print "No image given for upload.";
+		if($debug)
+			print "if(uploaded_image == true): ";
 		if($uploaded_image == true)
 		{
+			if($debug)
+				print "true<br/>";
 			$iinfo = explode(":",$iinfo);
 			$tclass = new tag();
 			$misc = new misc();
-			$ext = strtolower(substr($iinfo[1],-4,10000));
+			$ext = strtolower(strrchr($iinfo[1], "."));
 			$source = $db->real_escape_string(htmlentities($_POST['source'],ENT_QUOTES,'UTF-8'));
 			$title = $db->real_escape_string(htmlentities($_POST['title'],ENT_QUOTES,'UTF-8'));
 			$tags = strtolower($db->real_escape_string(str_replace('%','',mb_strtolower(mb_trim(htmlentities($_POST['tags'],ENT_QUOTES,'UTF-8'))))));
@@ -127,19 +152,27 @@
 				$user = "Anonymous";
 
 			$ip = $db->real_escape_string($_SERVER['REMOTE_ADDR']);
-			$isinfo = getimagesize("./images/".$iinfo[0]."/".$iinfo[1]);
+			//$isinfo = getimagesize("./images/".$iinfo[0]."/".$iinfo[1]);
+			$imgw = $image->getw();
+			$imgh = $image->geth();
 			if($ext == ".svg")
 			{
-				$isinfo[0] = 0;
-				$isinfo[1] = 0;
+				//$isinfo[0] = 0;
+				//$isinfo[1] = 0;
+				$imgw = 0;
+				$imgh = 0;
 			}
-			$query = "INSERT INTO $post_table(creation_date, hash, image, title, owner, height, width, ext, rating, tags, directory, source, active_date, ip) VALUES(NOW(), '".md5_file("./images/".$iinfo[0]."/".$iinfo[1])."', '".$iinfo[1]."', '$title', '$user', '".$isinfo[1]."', '".$isinfo[0]."', '$ext', '$rating', '$tags', '".$iinfo[0]."', '$source', '".date("Ymd")."', '$ip')";
+			$query = "INSERT INTO $post_table(creation_date, hash, image, title, owner, height, width, ext, rating, tags, directory, source, active_date, ip) VALUES(NOW(), '".md5_file("./images/".$iinfo[0]."/".$iinfo[1])."', '".$iinfo[1]."', '$title', '$user', '".$imgh."', '".$imgw."', '$ext', '$rating', '$tags', '".$iinfo[0]."', '$source', '".date("Ymd")."', '$ip')";
 			if($ext != ".svg")
 			{
 				if(!is_dir("./thumbnails/".$iinfo[0]."/"))
 					$image->makethumbnailfolder($iinfo[0]);
+				if($debug)
+					print "thumbnail()...";
 				if(!$image->thumbnail($iinfo[0]."/".$iinfo[1]))
 					print "Thumbnail generation failed! A serious error occured and the image could not be resized.<br /><br />";
+				if($debug)
+					print "finished<br/>";
 			}
 			if(!$db->query($query))
 			{

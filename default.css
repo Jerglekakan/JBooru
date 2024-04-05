@@ -43,6 +43,10 @@ img {
   vertical-align: middle;
 }
 
+img.vid_thumb {
+  border: solid;
+}
+
 input {
   padding: 0 0.5em;
 }
