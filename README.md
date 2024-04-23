@@ -21,8 +21,9 @@ Any version from the past, like, 15 years should be suitable. Once you have inst
 
 * Adjust `max_execution_time` and `max_input_time` in your php.ini config file so the batch add script is not stopped prematurely
 * Adjust `upload_max_filesize` in your php.ini config file to allow for larger uploads
+* Adjust `ft_min_word_len` and the [stopword file](https://dev.mysql.com/doc/refman/8.0/en/fulltext-stopwords.html) (or set `ft_stopword_file` to an empty string) if you want to allow shorter tags
 
-The `ffmpeg` and `ffprobe` commands must be accessible through your system's PATH environment variable. Unless the `avconv` lunacy makes a comeback, this shouldn't be an issue.
+The `ffmpeg` and `ffprobe` commands must be accessible through your system's PATH environment variable. Unless the `avconv` lunacy makes a comeback, this shouldn't need to be done manually.
 
 ## Features
 

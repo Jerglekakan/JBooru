@@ -10,3 +10,4 @@
   * Example: `character1 pair:(character2 top_hat)` - Returns every image with the 3 tags and with character2 specifically wearing a top hat
 * Allow logical OR in searches
 * When deleting posts, set the parent field of any child posts to null
+* Finish tag index fix script

@@ -34,10 +34,12 @@
 				} else if($_GET['confirm'] == 0) {
 					header("Location: $site_url");
 				} else {
-					echo "<h2>Yet to implement category deletion</h2><a href='".$site_url."admin'>Go Back</a>";
+					//echo "<h2>Yet to implement category deletion</h2><a href='".$site_url."admin'>Go Back</a>";
 					//Prepare SQL stuff
-					//$statement = $db->prepare("DELETE FROM `$tag_category_table` WHERE category_name=?");
-					//$statement->bind_param('s', $_GET['category']);
+					$statement = $db->prepare("DELETE FROM `$tag_category_table` WHERE category_name=?");
+					$statement->bind_param('s', $_GET['category']);
+					$statement->execute();
+					header("Location: $site_url/admin/?page=tag_categories");
 				}
 			break;
 		}
