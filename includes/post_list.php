@@ -177,7 +177,7 @@ function copyMe(node) {
 				{
 					$img = substr($row['image'],0,strrpos($row['image'], "."));
 					$img .= ".png";
-					$images .= '<span class="thumb"><a id="p'.$row['id'].'" href="index.php?page=post&amp;s=view&amp;id='.$row['id'].'"><img src="'.$thumbnail_url.'/'.$row['directory'].'/thumbnail_'.$img.'" alt="post" width="150" height="150" border="0" title="'.$row['tags'].' score:'.$row['score'].' rating:'. $row['rating'].'" class="vid_thumb"/></a>';
+					$images .= '<span class="thumb"><a id="p'.$row['id'].'" href="index.php?page=post&amp;s=view&amp;id='.$row['id'].'"><img src="'.$thumbnail_url.'/'.$row['directory'].'/thumbnail_'.$img.'" alt="post" border="0" title="'.$row['tags'].' score:'.$row['score'].' rating:'. $row['rating'].'" class="vid_thumb"/></a>';
 				}
 				else
 					$images .= '<span class="thumb"><a id="p'.$row['id'].'" href="index.php?page=post&amp;s=view&amp;id='.$row['id'].'"><img src="'.$thumbnail_url.'/'.$row['directory'].'/thumbnail_'.$row['image'].'" alt="post" border="0" title="'.$row['tags'].' score:'.$row['score'].' rating:'. $row['rating'].'"/></a>';

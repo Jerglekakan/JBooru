@@ -156,27 +156,27 @@
 			$thumbnail_name = "thumbnail_".$fname;
 			if($ext == ".jpg" || $ext == ".jpeg")
 			{
-				$img = imagecreatefromjpeg($fname);
+				$img = imagecreatefromjpeg("./".$this->image_path."/$bucket/$fname");
 			}
 			else if($ext == ".gif")
 			{
-				$img = imagecreatefromgif($fname);
+				$img = imagecreatefromgif("./".$this->image_path."/$bucket/$fname");
 			}
 			else if($ext == ".png")
 			{
-				$img = imagecreatefrompng($fname);
+				$img = imagecreatefrompng("./".$this->image_path."/$bucket/$fname");
 			}
 			else if($ext == ".bmp")
 			{
 				$version = explode('.', PHP_VERSION);
 				if($version[0] >= 7 && $version[1] >= 2)
-					$img = imagecreatefrombmp($fname);
+					$img = imagecreatefrombmp("./".$this->image_path."/$bucket/$fname");
 				else
-					$img = $this->ImageCreateFromBMP($fname);
+					$img = $this->ImageCreateFromBMP("./".$this->image_path."/$bucket/$fname");
 			}
 			else if($ext == ".webp")
 			{
-				$img = imagecreatefromwebp($fname);
+				$img = imagecreatefromwebp("./".$this->image_path."/$bucket/$fname");
 			}
 			else if($ext == ".svg")
 			{
@@ -200,6 +200,7 @@
 			$width = $this->width * $scale;
 			$height = $this->height * $scale;
 			$thumbnail = imagecreatetruecolor($width,$height);
+			//die("fname: $fname<br/>imagecopyresampled([dst], [src], 0, 0, 0, 0, $width, $height, ".$this->width.", ".$this->height.")<br/>ext: $ext");
 			imagecopyresampled($thumbnail,$img,0,0,0,0,$width,$height,$this->width,$this->height);
 			$ret = "";
 			if($ext == ".jpg" || $ext == ".jpeg")
