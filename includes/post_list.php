@@ -69,7 +69,7 @@ function copyMe(node) {
 		$date = date("Ymd");		
 		if($row['last_update'] < $date)
 		{
-			$query = "SELECT COUNT(id) FROM posts WHERE parent = '0'";
+			$query = "SELECT COUNT(id) FROM $post_table WHERE parent = '0'";
 			$result = $db->query($query);
 			$row = $result->fetch_assoc();
 			$numrows = $row['COUNT(id)'];

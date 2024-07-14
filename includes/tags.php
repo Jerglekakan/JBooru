@@ -30,22 +30,29 @@
 		{
 			$where_clause = "";
 			$negate = "";
-			$search_tags = urldecode($db->real_escape_string($_GET['tags']));
-			$tmp_arr = explode(" ", $search_tags);
-			foreach($tmp_arr as $cur_tag)
+			$in_tag = explode(" ", $_GET['tags'])[0];
+
+			$ttag = htmlentities($in_tag, ENT_QUOTES);
+			$ttag = str_replace("_", "\_", $ttag);
+			$ttag =	str_replace("*", "%", $ttag);
+			$ttag = str_replace("?", "_", $ttag);
+
+			if($in_tag[0] == '*' || $in_tag[strlen($in_tag)-1] == '*')
 			{
-				$ttag = str_replace("_", "\_", $cur_tag);
-				$ttag =	str_replace("*", "%", "$ttag");
-				$ttag = str_replace("?", "_", "$ttag");
 				if($where_clause == "")
-					$where_clause .= "(".$sort_values['name']." LIKE '%$ttag%'";
+					$where_clause .= "(tag LIKE '$ttag'";
 				else
-					$where_clause .= " AND ".$sort_values['name']." LIKE '%$ttag%'";
+					$where_clause .= " AND tag LIKE '$ttag'";
 			}
-			if($negate != "")
-				$where_clause .= $negate.")";
 			else
-				$where_clause .= ")";
+			{
+				if($where_clause == "")
+					$where_clause .= "(tag LIKE '%$ttag%'";
+				else
+					$where_clause .= " AND tag LIKE '%$ttag%'";
+			}
+
+			$where_clause .= "$negate)";
 		}
 		else
 		{
@@ -122,15 +129,17 @@
 	$category_field .= "</select><br/>";
 
 
-	echo "<form method='get' action=index.php?page=tags&s=list>
-		<input type='hidden' value='tags' name='page'></input>
-		<input type='hidden' value='list' name='s'></input>
-		<h4>Name</h4><input id='name' type='text' name='tags' value='".str_replace('+', ' ', $_GET['tags'])."'></input><br/>
+	if(strpos($_GET["tags"], " ") !== false)
+		echo "<div style='background-color:#E44;font-size:large;'>Extra tags will be ignored</div>";
+	echo "<form method='get' action='index.php?page=tags&s=list'>
+		<input type='hidden' value='tags' name='page' />
+		<input type='hidden' value='list' name='s' />
+		<h4>Name</h4><input id='name' type='text' name='tags' value='".(isset($in_tag) ? htmlentities($in_tag, ENT_QUOTES) : "")."' /><br/>
 		$order_field
 		$sort_field
 		$category_field
-		<h4>Results per page</h4><input type='text' name='results' value='$tag_limit'></input><br/>
-		<input type='submit' value='Search'></input>
+		<h4>Results per page</h4><input type='text' name='results' value='$tag_limit' /><br/>
+		<input type='submit' value='Search' />
 	</form>";
 
 	echo "<table class='highlightable' width='100%'>
@@ -143,10 +152,10 @@
 	while($row = $result->fetch_assoc())
 	{
 		echo "<tr>
-			<td><a class='".$row['category']."' href='$site_url?page=post&s=list&tags=".urlencode($row['tag'])."'>".$row['tag']."</a></td>
+			<td><a class='".$row['category']."' href='$site_url?page=post&s=list&tags=".urlencode(html_entity_decode($row['tag'], ENT_QUOTES))."'>".$row['tag']."</a></td>
 			<td>".$row['index_count']."</td>
-			<td>".$row['category']."</td>
-		</tr>";
+			<td>".$row['category']."</td>";
+		echo "</tr>\n";
 	}
 	$result->free_result();
 	echo "</table>
