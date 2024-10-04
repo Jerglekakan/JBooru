@@ -8,7 +8,7 @@ This repository includes all v0.1.11 [updates](https://gelbooru.com/index.php?pa
 
 ## Installation
 
-If you have a pre-existing Gelbooru installation, simply copy the repository files over to the installation folder and run any necessary scripts in <u>upgrades/</u>.
+If you have a pre-existing Gelbooru installation, simply copy the repository files over to the installation folder and run any necessary scripts in `upgrades/`.
 
 Otherwise, you will need the following packages/software:
 
@@ -19,10 +19,10 @@ Otherwise, you will need the following packages/software:
 
 Any version from the past, like, 15 years should be suitable. Once you have installed those, follow the steps outlined in [install/Readme.txt](install/Readme.txt). Additionaly, you may want to
 
-* Adjust `max_execution_time` and `max_input_time` in your <u>php.ini</u> config file so the batch add script is not stopped prematurely
-* Adjust `upload_max_filesize` in your <u>php.ini</u> config file to allow for larger uploads
+* Adjust `max_execution_time` and `max_input_time` in your `php.ini` config file so the batch add script is not stopped prematurely
+* Adjust `upload_max_filesize` in your `php.ini` config file to allow for larger uploads
 * In MySQL, adjust `ft_min_word_len` and the [stopword file](https://dev.mysql.com/doc/refman/8.0/en/fulltext-stopwords.html) (or set `ft_stopword_file` to an empty string) if you want to allow shorter tags
-* Enable caching by changing the following values in <u>config.php</u>
+* Enable caching by changing the following values in `config.php`
   * `$enable_cache = true`
   * `$main_cache_dir = /var/www/gelbooru/`
 
@@ -32,15 +32,15 @@ The __ffmpeg__ and __ffprobe__ commands must be accessible through your system's
 
 ### Tag Categories
 
-Tags can now be assigned to a category, thereby setting them apart from generic tags when viewing posts. When viewing a single post, tags of the same category will be grouped together, seperately from uncategorized tags, and will be colored differently as outlined in the new file <u>categories.css</u>. When viewing multiple posts, tags will __NOT__ be grouped together by category, but they will be colored appropriately.
+Tags can now be assigned to a category, thereby setting them apart from generic tags when viewing posts. When viewing a single post, tags of the same category will be grouped together, seperately from uncategorized tags, and will be colored differently as outlined in the new file `categories.css`. When viewing multiple posts, tags will __NOT__ be grouped together by category, but they will be colored appropriately.
 
 Tag categories can be created and deleted via a page added to the admin interface, but the category's css style must be manually added to the stylesheet. The stylesheet in this repository includes the styles used on Gelbooru.com for the Artist, Copyright, and Character categories.
 
 ### Recursive Image Import
 
-The <u>batch_add.php</u> script, which allows for the mass importing of large a quantity of images that are stored on the server but have not been added to the database, has been modified to be fully recursive. It searches the (configurable) directory <u>import/</u> located in the same directory as the script and adds all images to the database. Every directory that the script encounters will have its name treated as a full tag and that tag will be added to every image inside that directory and its children.
+The `batch_add.php` script, which allows for the mass importing of large a quantity of images that are stored on the server but have not been added to the database, has been modified to be fully recursive. It searches the (configurable) directory `import/` located in the same directory as the script and adds all images to the database. Every directory that the script encounters will have its name treated as a full tag and that tag will be added to every image inside that directory and its children.
 
-For this feature you are advised to use the following <u>php.ini</u> config values:
+For this feature you are advised to use the following `php.ini` config values:
 
 * `max_execution_time = 0`
 * `max_input_time = -1`
