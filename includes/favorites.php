@@ -38,7 +38,17 @@
 			$tags = $row['tags'];
 			$tags = substr($tags,1,strlen($tags));
 			$tags = substr($tags,0,strlen($tags)-1);
-			$images .= '<span class="thumb" style="margin: 10px;"><a href="index.php?page=post&amp;s=view&amp;id='.$row['id'].'" id="p'.$row['id'].'" onclick="document.location=\'index.php?page=post&amp;s=view&amp;id='.$row['id'].'\'; return false;"><img src="'.$domain.'/thumbnails/'.$row['dir'].'/thumbnail_'.$row['image'].'" title="'.$tags.'" border="0" alt="image_thumb"/></a>'; (isset($_COOKIE['user_id']) && $_COOKIE['user_id'] == $id) ? $images .= '<br /><a href="#" onclick="document.location=\'index.php?page=favorites&s=delete&id='.$row['id'].'&pid='.$page.'\'; return false;"><b>Remove</b></a></span>' : $images .= '</span>';
+			$ext = substr($row['image'], strrpos($row['image'], ".")+1);
+			$images .= '<span class="thumb" style="margin: 10px;"><a href="index.php?page=post&amp;s=view&amp;id='.$row['id'].'" id="p'.$row['id'].'" onclick="document.location=\'index.php?page=post&amp;s=view&amp;id='.$row['id'].'\'; return false;"><img src="'.$domain.'/thumbnails/'.$row['dir'].'/thumbnail_';
+			if($ext == "webm" || $ext == "mp4")
+				$images .= substr($row['image'], 0, strrpos($row['image'], ".")).".png\" class=\"vid_thumb";
+			else
+				$images .= $row['image'];
+			$images .= '" title="'.$tags.'" border="0" alt="image_thumb"/></a>';
+			if(isset($_COOKIE['user_id']) && $_COOKIE['user_id'] == $id)
+				$images .= '<br /><a href="#" onclick="document.location=\'index.php?page=favorites&s=delete&id='.$row['id'].'&pid='.$page.'\'; return false;"><b>Remove</b></a></span>';
+			else
+				$images .= '</span>';
 			$images .= '<script type="text/javascript">
 			//<![CDATA[
 			posts['.$row['id'].'] = {\'tags\':\''.str_replace('\\',"&#92;",str_replace(' ','%20',str_replace("'","&#039;",$tags))).'\'.split(/ /g), \'rating\':\''.$row['rating'].'\', \'score\':'.$row['score'].', \'user\':\''.str_replace('\\',"&#92;",str_replace(' ','%20',str_replace("'","&#039;",$row['owner']))).'\'}
