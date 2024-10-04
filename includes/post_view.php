@@ -252,7 +252,8 @@
 		$data = '';
 		$data = ob_get_contents();
 		ob_end_clean();
-		$cache->save("cache/".$id."/post.cache",$data);
+		if($enable_cache)
+			$cache->save("cache/".$id."/post.cache",$data);
 		echo str_replace("f6ca1c7d5d00a2a3fb4ea2f7edfa0f96a6d09c11717f39facabad2d724f16fbb",$domain,$data);
 		flush();
 	}

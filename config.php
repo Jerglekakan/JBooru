@@ -94,6 +94,7 @@
 	$anon_can_upload = true;
 	//Edit limit in minutes. If time is over this, edit will not happen.
 	$edit_limit = 20;
+	$enable_cache = false;
 	//cache dir, all cache will be stored in subdirs to this. Put it on RAM or FAST Raid drives.
 	//$main_cache_dir = "NUL:\\";
 ?>
