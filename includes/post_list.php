@@ -3,6 +3,7 @@
 	$limit = 20;
 	//number of pages to display. number - 1. ex: for 5 value should be 4
 	$page_limit = 10;
+	global $enable_cache;
 	require "includes/header.php";
 	$cache = new cache();
 	$user = new user();
@@ -80,52 +81,53 @@ function copyMe(node) {
 	else
 	{
 		//Searched some tag, deal with page caching of html files.
+		$misc = new misc();
+		$should_cache_response = true;
 		$tags = $db->real_escape_string(str_replace("%",'',mb_trim(htmlentities($_GET['tags'], ENT_QUOTES, 'UTF-8'))));		
 		$tags = explode(" ",$tags);
 		$tag_count = count($tags);
 		$new_tag_cache = urldecode($tags[0]);
-		$misc = new misc();
 		if(strpos(strtolower($new_tag_cache),"parent:") === false && strpos(strtolower($new_tag_cache),"user:") === false && strpos(strtolower($new_tag_cache),"rating:") === false && strpos($new_tag_cache,"*") === false)
 			$new_tag_cache = $misc->windows_filename_fix($new_tag_cache);
-		if(isset($_GET['pid']) && is_numeric($_GET['pid']) && $_GET['pid'] > 0)
-			$page = ($_GET['pid']/$limit)+1;
+		if($page == 0)
+			$pagenum = 1;
 		else
-			$page = 0;
-		if($tag_count > 1 || !is_dir("$main_cache_dir".""."search_cache/".$new_tag_cache."/") || !file_exists("$main_cache_dir".""."search_cache/".$new_tag_cache."/".$page.".html") || strpos(strtolower($new_tag_cache),"all") !== false || strpos(strtolower($new_tag_cache),"user:") !== false || strpos(strtolower($new_tag_cache),"rating:") !== false || substr($new_tag_cache,0,1) == "-" || strpos(strtolower($new_tag_cache),"*") !== false || strpos(strtolower($new_tag_cache),"parent:") !== false)
+			$pagenum = ($_GET['pid']/$limit)+1;
+		if($tag_count > 1 || !$enable_cache || !is_dir($main_cache_dir."search_cache/$new_tag_cache/") || !file_exists($main_cache_dir."search_cache/$new_tag_cache/$pagenum.html") || strpos(strtolower($new_tag_cache),"all") !== false || strpos(strtolower($new_tag_cache),"user:") !== false || strpos(strtolower($new_tag_cache),"rating:") !== false || substr($new_tag_cache,0,1) == "-" || strpos(strtolower($new_tag_cache),"*") !== false || strpos(strtolower($new_tag_cache),"parent:") !== false)
 		{
-			if(!is_dir("$main_cache_dir".""."search_cache/"))
-				@mkdir("$main_cache_dir".""."search_cache");
+			if($enable_cache && !is_dir($main_cache_dir."search_cache/"))
+				@mkdir($main_cache_dir."search_cache");
 			$query = $search->prepare_tags(implode(" ",$tags));
 			$result = $db->query($query) or die($db->error);
 			$numrows = $result->num_rows;
 			$result->free_result();
 			if($tag_count > 1 || strtolower($new_tag_cache) == "all" || strpos(strtolower($new_tag_cache),"user:") !== false || strpos(strtolower($new_tag_cache),"rating:") !== false || substr($new_tag_cache,0,1) == "-" || strpos(strtolower($new_tag_cache),"*") !== false || strpos(strtolower($new_tag_cache),"parent:") !== false)
-				$no_cache = false;
+				$should_cache_response = false;
 			else
 			{
-				if(!is_dir("$main_cache_dir".""."search_cache/".$new_tag_cache."/"))
-					@mkdir("$main_cache_dir".""."search_cache/".$new_tag_cache."/");				
-				$no_cache = true;
+				if($enable_cache && !is_dir($main_cache_dir."search_cache/$new_tag_cache/"))
+					@mkdir($main_cache_dir."search_cache/$new_tag_cache/");				
+				$should_cache_response = true;
 			}
 		}
 		else
 		{
-			if(!is_dir("$main_cache_dir".""."search_cache/"))
-				mkdir("$main_cache_dir".""."search_cache");
+			if($enable_cache && !is_dir($main_cache_dir."search_cache/"))
+				mkdir($main_cache_dir."search_cache");
 			$tags = $new_tag_cache;
 			if(isset($_GET['pid']) && is_numeric($_GET['pid']) && $_GET['pid'] > 0)
-				$page = ($_GET['pid']/$limit)+1;
+				$pagenum = ($_GET['pid']/$limit)+1;
 			else
-				$page = 0;
+				$pagenum = 0;
 				
 			$cache = new cache();
-			$no_cache = true;
-			if(is_dir("$main_cache_dir".""."search_cache/".$tags."/") && file_exists("$main_cache_dir".""."search_cache/".$tags."/".$page.".html"))
+			$should_cache_response = true;
+			if(is_dir($main_cache_dir."search_cache/$tags/") && file_exists($main_cache_dir."search_cache/$tags/$pagenum.html"))
 			{
-				$data = $cache->load("search_cache/".$tags."/".$page.".html");
+				$data = $cache->load("search_cache/$tags/$pagenum.html");
 				echo $data;
 				$numrows = 1;
-				$no_cache = false;			
+				$should_cache_response = false;			
 			}
 		}
 	}
@@ -143,12 +145,12 @@ function copyMe(node) {
 			$query = "SELECT id, image, directory, score, rating, tags, owner FROM $post_table ORDER BY id DESC LIMIT $page, $limit";
 		else
 		{
-			if($no_cache === true || isset($tag_count) && $tag_count > 1 || strpos(strtolower($new_tag_cache),"user:") !== false || strpos(strtolower($new_tag_cache),"rating:") !== false || substr($new_tag_cache,0,1) == "-" || strpos(strtolower($new_tag_cache),"*") !== false || strpos(strtolower($new_tag_cache),"parent:") !== false)
+			if($should_cache_response || isset($tag_count) && $tag_count > 1 || strpos(strtolower($new_tag_cache),"user:") !== false || strpos(strtolower($new_tag_cache),"rating:") !== false || substr($new_tag_cache,0,1) == "-" || strpos(strtolower($new_tag_cache),"*") !== false || strpos(strtolower($new_tag_cache),"parent:") !== false)
 				$query = $query." LIMIT $page, $limit";			
 		}
-		if(!isset($_GET['tags']) || $no_cache === true || isset($tag_count) && $tag_count > 1 || strtolower($_GET['tags']) == "all" || strpos(strtolower($new_tag_cache),"user:") !== false || strpos(strtolower($new_tag_cache),"rating:") !== false || substr($new_tag_cache,0,1) == "-" || strpos(strtolower($new_tag_cache),"*") !== false || strpos(strtolower($new_tag_cache),"parent:") !== false)
+		if(!isset($_GET['tags']) || $should_cache_response || isset($tag_count) && $tag_count > 1 || strtolower($_GET['tags']) == "all" || strpos(strtolower($new_tag_cache),"user:") !== false || strpos(strtolower($new_tag_cache),"rating:") !== false || substr($new_tag_cache,0,1) == "-" || strpos(strtolower($new_tag_cache),"*") !== false || strpos(strtolower($new_tag_cache),"parent:") !== false)
 		{
-			if(isset($no_cache) && $no_cache === true)
+			if($should_cache_response && $enable_cache)
 				ob_start();
 						
 			$gtags = array();
@@ -229,11 +231,11 @@ function copyMe(node) {
 			$in_tags = false;
 			if(array_key_exists("tags", $_GET))
 				$in_tags = $_GET['tags'];
-			print $misc->pagination($_GET['page'],$_GET['s'],false,$limit,$page_limit,$numrows,$pg,$in_tags);
+			echo $misc->pagination($_GET['page'],$_GET['s'],false,$limit,$page_limit,$numrows,$pg,$in_tags);
 			
 		}
 		//Cache doesn't exist for search, make one.
-		if(isset($no_cache) && $no_cache === true)
+		if($should_cache_response && $enable_cache)
 		{
 			$data = ob_get_contents();
 			ob_end_clean();

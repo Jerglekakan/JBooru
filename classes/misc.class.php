@@ -223,6 +223,7 @@
 		
 		function pagination($page_type,$sub = false,$id = false,$limit = false,$page_limit = false,$count = false,$page = false,$tags = false, $query = false)
 		{
+			$output = "";
 			$has_id = "";
 			$has_tags = "";
 			if(isset($id) && $id > 0)
@@ -233,39 +234,30 @@
 				$sub = '&amp;s='.$sub.'';
 			if(isset($query) && $query != "" && $query)
 				$query = '&amp;query='.urlencode($query).'';
+
+			//calc page count
 			$pages = intval($count/$limit);
 			if ($count%$limit)
 				$pages++;
+
+			//target page
 			$current = ($page/$limit) + 1;
-			$total = $pages;
-			if ($pages < 1 || $pages == 0 || $pages == "")
-				$total = 1;
-				
-			$first = $page + 1;
-			$last = $count;
-			if (!((($page + $limit) / $limit) >= $pages) && $pages != 1)
-				$last = $page + $limit;
-			$output = "";
-			if($page == 0)
-				$start = 1;
+
+			//start
+			if($current > $page_limit/2)
+				$start = $current - ($page_limit/2);
 			else
-				$start = ($page/$limit) + 1;
-			$tmp_limit = $start + $page_limit;
-			if($tmp_limit > $pages)
-				$tmp_limit = $pages;
-			if($pages > $page_limit)
-			{
-				$lowerlimit = $pages - $page_limit;
-				if($start > $lowerlimit)
-					$start = $lowerlimit;
-			}
-			$lastpage = $limit*($pages - 1);
+				$start = 1;
+			//end
+			$lastpage = min($start+$page_limit, $pages);
+			$lastpage_pid = $lastpage * $limit;
+
 			if($page != 0 && !((($page+$limit) / $limit) > $pages)) 
 			{ 
 				$back_page = $page - $limit;
 				$output .=  '<a href="?page='.$page_type.''.$sub.''.$query.''.$has_id.''.$has_tags.'&amp;pid=0" alt="first page">&lt;&lt;</a><a href="?page='.$page_type.''.$sub.''.$query.''.$has_id.''.$has_tags.'&amp;pid='.$back_page.'" alt="back">&lt;</a>';
 			}
-			for($i=$start; $i <= $tmp_limit; $i++)
+			for($i=$start; $i <= $lastpage; $i++)
 			{
 				$ppage = $limit*($i - 1);
 				if($ppage >= 0)
@@ -280,7 +272,7 @@
 			{ 
 				// If last page don't give next link.
 				$next_page = $page + $limit;
-				$output .= '<a href="?page='.$page_type.''.$sub.''.$query.''.$has_id.''.$has_tags.'&amp;pid='.$next_page.'" alt="next">&gt;</a><a href="?page='.$page_type.''.$sub.''.$query.''.$has_id.''.$has_tags.'&amp;pid='.$lastpage.'" alt="last page">&gt;&gt;</a>';
+				$output .= '<a href="?page='.$page_type.''.$sub.''.$query.''.$has_id.''.$has_tags.'&amp;pid='.$next_page.'" alt="next">&gt;</a><a href="?page='.$page_type.''.$sub.''.$query.''.$has_id.''.$has_tags.'&amp;pid='.$lastpage_pid.'" alt="last page">&gt;&gt;</a>';
 			}
 			return $output;
 		}

@@ -3,6 +3,7 @@
 	$limit = 10;
 	//number of pages to display. number - 1. ex: for 5 value should be 4
 	$page_limit = 6;
+	global $enable_cache;
 	//Load required class files. post.class and cache.class
 	$post = new post();
 	$cache = new cache();
@@ -23,11 +24,14 @@
 		exit;
 	}
 	$prev_next = $post->prev_next($id);
-	//global $special_tags;
 	
-	if(!is_dir("$main_cache_dir".""."\cache/$id"))
-		$cache->create_page_cache("cache/$id");
-	$data = $cache->load("cache/".$id."/post.cache");
+	$data = false;
+	if($enable_cache)
+	{
+		if(!is_dir("$main_cache_dir".""."\cache/$id"))
+			$cache->create_page_cache("cache/$id");
+		$data = $cache->load("cache/".$id."/post.cache");
+	}
 	if($data !== false)
 	{
 		echo str_replace("f6ca1c7d5d00a2a3fb4ea2f7edfa0f96a6d09c11717f39facabad2d724f16fbb",$domain,$data);
