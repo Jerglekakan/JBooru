@@ -1,7 +1,7 @@
 <?php
 	//number of comments/page
 	$limit = 10;
-	//number of pages to display. number - 1. ex: for 5 value should be 4
+	//number of pages to display
 	$page_limit = 6;
 	global $enable_cache;
 	//Load required class files. post.class and cache.class

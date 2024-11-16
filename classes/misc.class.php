@@ -240,7 +240,7 @@
 			if ($count%$limit)
 				$pages++;
 
-			//target page
+			//current page
 			$current = ($page/$limit) + 1;
 
 			//start
@@ -250,7 +250,22 @@
 				$start = 1;
 			//end
 			$lastpage = min($start+$page_limit, $pages);
-			$lastpage_pid = $lastpage * $limit;
+			$lastpage_pid = intval($count/$limit) * $limit;
+
+			//special cases
+			if($pages < $page_limit)
+			{
+				$start = 1;
+				$lastpage = $pages;
+			}
+			else if($lastpage - $current < $page_limit/2)
+			{
+				$start = $pages - $page_limit;
+			}
+			else if($current <= $page_limit/2)
+			{
+				$lastpage = $page_limit;
+			}
 
 			if($page != 0 && !((($page+$limit) / $limit) > $pages)) 
 			{ 

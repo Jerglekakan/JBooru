@@ -1,7 +1,7 @@
 <?php
 	//number of images/page
 	$limit = 20;
-	//number of pages to display. number - 1. ex: for 5 value should be 4
+	//number of pages to display
 	$page_limit = 10;
 	global $enable_cache;
 	require "includes/header.php";

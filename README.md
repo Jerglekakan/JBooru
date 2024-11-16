@@ -70,3 +70,5 @@ Example: `489 732 590 400-450 789`
 * Added `.webp` and `.svg` support
 * Added `.webm` and `.mp4` video support using ffmpeg
 * Added score searching (credit [iKonKur](https://github.com/iKonKur))
+* Adjusted pagination so the current page is always in the center of the range
+* Added ability to disable search caching via `config.php`
