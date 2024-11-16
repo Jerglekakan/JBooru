@@ -143,12 +143,12 @@ function copyMe(node) {
 			$query = "SELECT id, image, directory, score, rating, tags, owner FROM $post_table ORDER BY id DESC LIMIT $page, $limit";
 		else
 		{
-			if($no_cache === true || $tag_count > 1 || strpos(strtolower($new_tag_cache),"user:") !== false || strpos(strtolower($new_tag_cache),"rating:") !== false || substr($new_tag_cache,0,1) == "-" || strpos(strtolower($new_tag_cache),"*") !== false || strpos(strtolower($new_tag_cache),"parent:") !== false)
+			if($no_cache === true || isset($tag_count) && $tag_count > 1 || strpos(strtolower($new_tag_cache),"user:") !== false || strpos(strtolower($new_tag_cache),"rating:") !== false || substr($new_tag_cache,0,1) == "-" || strpos(strtolower($new_tag_cache),"*") !== false || strpos(strtolower($new_tag_cache),"parent:") !== false)
 				$query = $query." LIMIT $page, $limit";			
 		}
-		if(!isset($_GET['tags']) || $no_cache === true || $tag_count > 1 || strtolower($_GET['tags']) == "all" || strpos(strtolower($new_tag_cache),"user:") !== false || strpos(strtolower($new_tag_cache),"rating:") !== false || substr($new_tag_cache,0,1) == "-" || strpos(strtolower($new_tag_cache),"*") !== false || strpos(strtolower($new_tag_cache),"parent:") !== false)
+		if(!isset($_GET['tags']) || $no_cache === true || isset($tag_count) && $tag_count > 1 || strtolower($_GET['tags']) == "all" || strpos(strtolower($new_tag_cache),"user:") !== false || strpos(strtolower($new_tag_cache),"rating:") !== false || substr($new_tag_cache,0,1) == "-" || strpos(strtolower($new_tag_cache),"*") !== false || strpos(strtolower($new_tag_cache),"parent:") !== false)
 		{
-			if($no_cache === true)
+			if(isset($no_cache) && $no_cache === true)
 				ob_start();
 						
 			$gtags = array();
@@ -223,11 +223,17 @@ function copyMe(node) {
 
 			//Pagination function. This should work for the whole site... Maybe.
 			$misc = new misc();
-			print $misc->pagination($_GET['page'],$_GET['s'],$id,$limit,$page_limit,$numrows,$_GET['pid'],$_GET['tags']);
+			$pg = false;
+			if(array_key_exists("pid", $_GET))
+				$pg = $_GET['pid'];
+			$in_tags = false;
+			if(array_key_exists("tags", $_GET))
+				$in_tags = $_GET['tags'];
+			print $misc->pagination($_GET['page'],$_GET['s'],false,$limit,$page_limit,$numrows,$pg,$in_tags);
 			
 		}
 		//Cache doesn't exist for search, make one.
-		if($no_cache === true)
+		if(isset($no_cache) && $no_cache === true)
 		{
 			$data = ob_get_contents();
 			ob_end_clean();

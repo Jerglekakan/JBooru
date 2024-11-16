@@ -224,6 +224,7 @@
 		function pagination($page_type,$sub = false,$id = false,$limit = false,$page_limit = false,$count = false,$page = false,$tags = false, $query = false)
 		{
 			$has_id = "";
+			$has_tags = "";
 			if(isset($id) && $id > 0)
 				$has_id = '&amp;id='.$id.'';
 			if(isset($tags) && $tags !="" && $tags)
@@ -253,9 +254,11 @@
 			if($tmp_limit > $pages)
 				$tmp_limit = $pages;
 			if($pages > $page_limit)
+			{
 				$lowerlimit = $pages - $page_limit;
-			if($start > $lowerlimit)
-				$start = $lowerlimit;
+				if($start > $lowerlimit)
+					$start = $lowerlimit;
+			}
 			$lastpage = $limit*($pages - 1);
 			if($page != 0 && !((($page+$limit) / $limit) > $pages)) 
 			{ 
