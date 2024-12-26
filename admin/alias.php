@@ -6,8 +6,8 @@
 	{
 		if(isset($_POST['accept']) && is_numeric($_POST['accept']))
 		{
-			$tag = $db->real_escape_string($_GET['tag']);
-			$alias = $db->real_escape_string($_GET['alias']);
+			$tag = $db->real_escape_string(htmlentities($_GET['tag']));
+			$alias = $db->real_escape_string(htmlentities($_GET['alias']));
 			if($_POST['accept'] == 1)
 			{
 				$tagc = new tag();
