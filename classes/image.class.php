@@ -520,7 +520,7 @@
 		
 		function removeimage($id)
 		{
-			global $db, $post_table, $note_table, $note_history_table, $user_table, $group_table, $favorites_table, $favorites_count_table, $comment_table, $comment_vote_table, $deleted_image_table;
+			global $db, $post_table, $note_table, $note_history_table, $user_table, $group_table, $favorites_table, $favorites_count_table, $comment_table, $comment_vote_table, $deleted_image_table, $parent_child_table, $enable_cache, $post_count_table;
 			$can_delete = false;
 			$id = $db->real_escape_string($id);
 			$query = "SELECT directory, image, owner, tags, hash FROM $post_table WHERE id='$id'";
@@ -583,7 +583,10 @@
 				$query = "SELECT id FROM $post_table WHERE parent='$id'";
 				$result = $db->query($query);
 				while($row = $result->fetch_assoc())
-					$cache->destroy("../cache/".$id."/post.cache");
+				{
+					if($enable_cache)
+						$cache->destroy("../cache/".$id."/post.cache");
+				}
 				$query = "UPDATE $post_table SET parent='' WHERE parent='$id'";
 				$db->query($query);
 				unlink("../images/".$dir."/".$image);
@@ -601,8 +604,11 @@
 					if($tag != "")
 					{
 						$itag->deleteindextag($tag);
-						if(is_dir("../search_cache/".$misc->windows_filename_fix($tag)."/"))
-						$cache->destroy_page_cache("../search_cache/".$misc->windows_filename_fix($tag)."/");
+						if($enable_cache)
+						{
+							if(is_dir("../search_cache/".$misc->windows_filename_fix($tag)."/"))
+							$cache->destroy_page_cache("../search_cache/".$misc->windows_filename_fix($tag)."/");
+						}
 					}
 				}
 				$query = "UPDATE $post_count_table SET last_update='20060101' WHERE access_key='posts'";

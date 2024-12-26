@@ -51,7 +51,7 @@
 				include "removeForm.html";
 				exit;
 			}
-			//do nothing
+			//Do nothing
 			break;
 		case "title":
 			if(empty($_GET['title']))
@@ -84,7 +84,7 @@
 			header("Location:".$site_url);
 			break;
 	}
-	if($_GET['images'] != "")
+	if(strlen($_GET['images']) > 0)
 	{
 		if($_GET['by'] != "ID")
 			$where_clause .= " AND (";
@@ -158,15 +158,16 @@
 		{
 			if($debug || isset($_GET['display_ids']))
 			{
-				echo "ID: '".$post['id']."' Title: '".$post['title']."'<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tags: ".$post['tags']."<br/><br/>";
+				echo "ID: '".$post['id']."'<br/>Title: '".$post['title']."'<br/>Tags: ".$post['tags']."<br/><br/>";
 			}
 			else
 			{
-				if($image->removeimage($post['id']) == true) {
+				if($image->removeimage($post['id'])) {
 					$delete_count++;
 					echo "<span style=\"color: rgb(0, 255, 0);\">Image ".$post['id']." successfully deleted!</span><br/>";
 					//copied the rest from remove.php
-					$cache->destroy_page_cache("cache/".$post['id']);
+					if($enable_cache)
+						$cache->destroy_page_cache("cache/".$post['id']);
 					$query = "SELECT id FROM $post_table WHERE id < ".$post['id']." ORDER BY id DESC LIMIT 1";
 					if($result = $db->query($query))
 					{
@@ -198,10 +199,13 @@
 						continue;
 					}
 					$date = date("Ymd");
-					if(is_dir("$main_cache_dir".""."cache/".$prev_id) && "$main_cache_dir".""."cache/".$prev_id != "$main_cache_dir".""."cache/")
-					$cache->destroy_page_cache("cache/".$prev_id);
-					if(is_dir("$main_cache_dir".""."cache/".$next_id) && "$main_cache_dir".""."cache/".$next_id != "$main_cache_dir".""."cache/")				
-					$cache->destroy_page_cache("cache/".$next_id);
+					if($enable_cache)
+					{
+						if(is_dir("$main_cache_dir".""."cache/".$prev_id) && "$main_cache_dir".""."cache/".$prev_id != "$main_cache_dir".""."cache/")
+							$cache->destroy_page_cache("cache/".$prev_id);
+						if(is_dir("$main_cache_dir".""."cache/".$next_id) && "$main_cache_dir".""."cache/".$next_id != "$main_cache_dir".""."cache/")				
+							$cache->destroy_page_cache("cache/".$next_id);
+					}
 				} else {
 					$fail_count++;
 					echo "<span style=\"color: rgb(255, 0, 0);\">removeimage() failed for image ID '".$row['id']."'</span><br/>;
