@@ -11,8 +11,6 @@
 	$rejected_files = 0;
 	$skipped_files = 0;
 
-	$blah = 0;
-	
 	function getTagString($tagString)
 	{
 		global $import_dir, $import_dir_len;
@@ -27,10 +25,7 @@
 	
 	function rScanDir($scanMe)
 	{
-		global $files, $blah, $file_count;
-		echo "$scanMe<br/>";
-		if($blah++ > 2)
-			return;
+		global $files, $file_count;
 		foreach(scandir($scanMe) as $item)
 		{
 			if($item == "." || $item == "..")
@@ -47,9 +42,6 @@
 
 
 	rScanDir($import_dir);
-
-	//print_r($files);
-
 	for($i = 0; $i < $file_count; $i++)
 	{
 		$file = $files[$i];
