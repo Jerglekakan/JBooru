@@ -49,8 +49,7 @@
 		$ext = $path_info['extension'];
 		$tags = getTagString($file);
 		print "<strong>$file</strong><br/>";
-		print "Tags | $tags";
-		print "<br><br>";
+		print "Tags | $tags<br/>";
 		if(!$image->validext($file))
 		{
 			print "<span style=\"color: rgb(255, 0, 0);\">Invalid Extension</span><br/><br/>";
