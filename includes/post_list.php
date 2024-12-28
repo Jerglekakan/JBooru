@@ -63,6 +63,7 @@ function copyMe(node) {
 	//No tags  have been searched for so let's check the last_update value to update our main page post count for parent posts. Updated once a day.
 	if(!isset($_GET['tags']) || isset($_GET['tags']) && $_GET['tags'] == "all" || isset($_GET['tags']) && $_GET['tags'] == "")
 	{
+		$should_cache_response = false;
 		$query = "SELECT pcount, last_update FROM $post_count_table WHERE access_key='posts'";
 		$result = $db->query($query);
 		$row = $result->fetch_assoc();
