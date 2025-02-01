@@ -161,9 +161,9 @@ function copyMe(node) {
 			//Limit main tag listing to 40 tags. Keep the loop down to the minimum really.
 			while($row = $result->fetch_assoc())
 			{
-				$tags = mb_trim($row['tags']);
+				$tags = mb_trim(html_entity_decode($row['tags'], ENT_QUOTES, "UTF-8"));
 				if($tcount <= 40)
-				{	
+				{
 					$ttags = explode(" ",$tags);
 					foreach($ttags as $current)
 					{
@@ -196,7 +196,7 @@ function copyMe(node) {
 			}
 			$result->free_result();	
 			if(isset($_GET['tags']) && $_GET['tags'] != "" && $_GET['tags'] != "all")
-				$ttags = $db->real_escape_string(str_replace("'","&#039;",$_GET['tags']));
+				$ttags = $db->real_escape_string(urldecode($_GET['tags']));
 			else
 				$ttags = "";
 			asort($gtags);
@@ -210,8 +210,8 @@ function copyMe(node) {
 				$query = "SELECT index_count, category FROM $tag_index_table WHERE tag='".$db->real_escape_string(str_replace("'","&#039;",$current))."'";
 				$result = $db->query($query);
 				$row = $result->fetch_assoc();
-				$t_decode = urlencode(html_entity_decode($ttags,ENT_NOQUOTES,"UTF-8"));
-				$c_decode = urlencode(html_entity_decode($current,ENT_NOQUOTES,"UTF-8"));
+				$t_decode = urlencode($ttags);
+				$c_decode = urlencode($current);
 				echo '<li><a href="index.php?page=post&amp;s=list&amp;tags='.$t_decode."+".$c_decode.'">+</a><a href="index.php?page=post&amp;s=list&amp;tags='.$t_decode."+-".$c_decode.'">-</a> <span style="color: #a0a0a0;">? <a href="index.php?page=post&amp;s=list&amp;tags='.$c_decode.'" class="'.$row['category'].'">'.str_replace('_',' ',$current).'</a> '.$row['index_count'].'</span></li>';
 			}
 			//Print out image results and filter javascript
