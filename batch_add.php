@@ -11,12 +11,12 @@
 	$rejected_files = 0;
 	$skipped_files = 0;
 
-	function getTagString($tagString)
+	function getTagString($filepath)
 	{
 		global $import_dir, $import_dir_len;
-		$ret = trim($tagString);
-		if(substr(trim($tagString), 0, $import_dir_len) === $import_dir)
-			$ret = substr(trim($tagString), $import_dir_len);
+		$ret = trim($filepath);
+		if(substr(trim($filepath), 0, $import_dir_len) === $import_dir)
+			$ret = substr(trim($filepath), $import_dir_len);
 		$ret = substr($ret, 0, strrpos($ret, "/"));
 		$ret = str_replace(" ", "_", $ret);
 		$ret = str_replace("/", " ", $ret);
@@ -50,7 +50,7 @@
 		$tags = getTagString($file);
 		print "<strong>$file</strong><br/>";
 		print "Tags | $tags<br/>";
-		if(!$image->validext($file))
+		if(!image::validext($file))
 		{
 			print "<span style=\"color: rgb(255, 0, 0);\">Invalid Extension</span><br/><br/>";
 			$skipped_files++;
