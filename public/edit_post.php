@@ -145,34 +145,42 @@
 	}
 	$query = "SELECT parent FROM $parent_child_table WHERE child='$id'";
 	$result = $db->query($query);
-	$row = $result->fetch_assoc();
-	$cache = new cache();
-	$tmp_parent = $row['parent'];
-	if(is_numeric($row['parent']))
+	if($result->num_rows > 0)
 	{
-		if($tmp_parent != $parent && $parent == '' || $tmp_parent != $parent && $parent == '0')
+		$row = $result->fetch_assoc();
+		$cache = new cache();
+		$tmp_parent = $row['parent'];
+		if(is_numeric($row['parent']))
 		{
-			$query = "DELETE FROM $parent_child_table WHERE child='$id' AND parent='".$row['parent']."'";
-			$db->query($query) or die($db->error);
-			$cache->destroy("cache/".$row['parent']."/post.cache");
-		}
-		else if($tmp_parent != $parent)
-		{
-			$query = "UPDATE $parent_child_table SET parent='$parent' WHERE child='$id' AND parent='".$row['parent']."'";
-			$db->query($query);
-		}
-		if($tmp_parent != $parent)
-		{
-			$misc = new misc();
-			$mtags = explode(" ",$tags);
-			foreach($mtags as $current)
+			if($tmp_parent != $parent && $parent == '' || $tmp_parent != $parent && $parent == '0')
 			{
-				if($current != "")
-				{
-					if(is_dir("../search_cache/".$misc->windows_filename_fix($current)."/"))
-						$cache->destroy_page_cache("search_cache/".$misc->windows_filename_fix($current)."/");
-				}	
+				$query = "DELETE FROM $parent_child_table WHERE child='$id' AND parent='".$row['parent']."'";
+				$db->query($query) or die($db->error);
+				$cache->destroy("cache/".$row['parent']."/post.cache");
 			}
+			else if($tmp_parent != $parent)
+			{
+				$query = "UPDATE $parent_child_table SET parent='$parent' WHERE child='$id' AND parent='".$row['parent']."'";
+				$db->query($query);
+			}
+			if($tmp_parent != $parent)
+			{
+				$misc = new misc();
+				$mtags = explode(" ",$tags);
+				foreach($mtags as $current)
+				{
+					if($current != "")
+					{
+						if(is_dir("../search_cache/".$misc->windows_filename_fix($current)."/"))
+							$cache->destroy_page_cache("search_cache/".$misc->windows_filename_fix($current)."/");
+					}	
+				}
+			}
+		}
+		else if(is_numeric($parent))
+		{
+			$query = "INSERT INTO $parent_child_table(parent,child) VALUES('$parent','$id')";
+			$db->query($query);
 		}
 	}
 	else
