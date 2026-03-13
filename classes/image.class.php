@@ -4,10 +4,12 @@
 		private $image_path;
 		private $thumbnail_path;
 		private $dimension;
+
 		private $width;
 		private $height;
 		private $extension;
 		private $mime;
+
 		public $error;
 		function __construct()
 		{
@@ -116,7 +118,10 @@
 				return false;
 			}
 			if($img === NULL || $img === false)
+			{
+				print "img is null<br/>";
 				return false;
+			}
 				
 			$max = ($this->width > $this->height) ? $this->width : $this->height;
 			$scale = ($max < $this->dimension) ? 1 : $this->dimension / $max;
@@ -443,6 +448,7 @@
 		
 		function makethumbnailfolder($folder)
 		{
+			global $thumbnail_folder;
 			mkdir("./$thumbnail_folder/$folder/");
 		}
 		
@@ -675,7 +681,7 @@
 
 			if(substr($this->mime,0,5) != "image" && substr($this->mime,0,5) != "video")
 			{
-				$this->error = "Wrong mimetype";
+				$this->error = "Wrong mimetype: ".$this->mime;
 				$this->width = 0;
 				$this->height = 0;
 				$this->mime = "";
