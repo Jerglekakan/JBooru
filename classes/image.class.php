@@ -115,11 +115,14 @@
 			}
 			else
 			{
+				$this->error = "unknown extension $ext";
+				$this->extension = "";
 				return false;
 			}
 			if($img === NULL || $img === false)
 			{
-				print "img is null<br/>";
+				$this->error = "img is null";
+				$this->extension = "";
 				return false;
 			}
 				
@@ -176,6 +179,12 @@
 			$misc = new misc();
 			if(strlen($url) == 0 || strlen(trim($url)) == 0 || !self::validext($url))
 				return false;
+			if(strlen($url) >= 200)
+			{
+				$this->error = "Image filename too long<br/>";
+				$this->extension = "";
+				return false;
+			}
 			$ext = strrchr($url, '.');
 			$ext = substr($ext, 1);
 			$this->extension = $ext;

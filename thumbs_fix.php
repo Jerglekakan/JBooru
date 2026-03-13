@@ -41,7 +41,7 @@
 			if(!$image->load($imgpath))
 			{
 				$fail_count++;
-				print "Error loading metadata for $imgpath: ".$image->geterror()."<br/><br/>";
+				print "Error loading $imgpath: ".$image->geterror()."<br/><br/>";
 				continue;
 			}
 			if(!is_dir($thumb_dir.$bucket))
@@ -54,7 +54,7 @@
 			else
 			{
 				$fail_count++;
-				print "<span style='color:red'>$thumb failed</span>. <a href='$img_href'>Source image</a> might be corrupted<br/><br/>";
+				print "<span style='color:red'>$thumb failed:</span>".$image->geterror().".<br/><a href='$img_href'>Source image</a> might be corrupted<br/><br/>";
 			}
 		}
 	}
