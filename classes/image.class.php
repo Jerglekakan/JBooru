@@ -660,6 +660,7 @@
 			$this->height = $iinfo[1];
 			$this->mime = $iinfo['mime'];
 
+
 			if(substr($this->mime,0,5) != "image" && substr($this->mime,0,5) != "video")
 			{
 				$this->error = "Wrong mimetype";
@@ -669,6 +670,45 @@
 				$this->extension = "";
 				return false;
 			}
+
+			$ext = strtolower(strrchr($image, '.'));
+			if(($ext == ".jpg" || $ext == ".jpeg") && $this->mime !== "image/jpeg")
+			{
+				$this->error = "jpeg extension but mimetype is ".$this->mime;
+				$this->width = 0;
+				$this->height = 0;
+				$this->mime = "";
+				$this->extension = "";
+				return false;
+			}
+			if($ext == ".png" && $this->mime != "image/png")
+			{
+				$this->error = "png extension but mimetype is ".$this->mime;
+				$this->width = 0;
+				$this->height = 0;
+				$this->mime = "";
+				$this->extension = "";
+				return false;
+			}
+			if($ext == ".gif" && $this->mime != "image/gif")
+			{
+				$this->error = "gif extension but mimetype is ".$this->mime;
+				$this->width = 0;
+				$this->height = 0;
+				$this->mime = "";
+				$this->extension = "";
+				return false;
+			}
+			if($ext == ".webp" && $this->mime != "image/webp")
+			{
+				$this->error = "webp extension but mimetype is ".$this->mime;
+				$this->width = 0;
+				$this->height = 0;
+				$this->mime = "";
+				$this->extension = "";
+				return false;
+			}
+
 			if($this->width < $min_upload_width && $min_upload_width != 0 || $this->width > $max_upload_width && $max_upload_width != 0)
 			{
 				$this->error = "Invalid width";
