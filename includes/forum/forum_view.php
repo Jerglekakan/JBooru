@@ -12,7 +12,7 @@
 		$page = $db->real_escape_string($_GET['pid']);
 	else
 		$page = 0;
-	$id = $db->real_escape_string($_GET['id']);
+	$id = $db->real_escape_string((int)$_GET['id']);
 	if($user->check_log())
 	{
 		$uname = $checked_username;
