@@ -50,6 +50,41 @@
 			return false;
 		}
 
+		public static function wrongext($path)
+		{
+			$ext = "";
+			if(strrpos($path, ".") !== false)
+			{
+				$ext = strrchr($path, '.');
+				$ext = substr($ext, 1);
+			}
+			$ext = strtolower($ext);
+			
+			$iinfo = getimagesize($path);
+
+			switch($ext)
+			{
+				case "jpg":
+				case "jpeg":
+					return ($iinfo["mime"] !== "image/jpeg");
+				break;
+
+				case "png":
+					return ($iinfo["mime"] !== "image/png");
+				break;
+
+				case "gif":
+					return ($iinfo["mime"] !== "image/gif");
+				break;
+
+				case "webp":
+					return ($iinfo["mime"] !== "image/webp");
+				break;
+			}
+
+			return true;
+		}
+
 		function imagecreatefromvideo($filename)
 		{
 			$command = "ffmpeg -i $filename -vf thumbnail=300 -frames:v 1 -c:v png -f rawvideo -";
@@ -612,6 +647,11 @@
 			return $this->height;
 		}
 
+		function getmime()
+		{
+			return $this->mime;
+		}
+
 		function validimage($image)
 		{
 			global $min_upload_width, $min_upload_height, $max_upload_width, $max_upload_height;
@@ -736,6 +776,71 @@
 					return false;
 			}
 			return true;
+		}
+
+		function fixext($path)
+		{
+			global $db, $post_table;
+
+			$newext = "";
+			switch($this->mime)
+			{
+				case "image/jpeg":
+					$newext = "jpg";
+				break;
+
+				case "image/png":
+					$newext = "png";
+				break;
+
+				case "image/gif":
+					$newext = "gif";
+				break;
+
+				case "image/webp":
+					$newext = "webp";
+				break;
+
+				default:
+					return false;
+				break;
+			}
+
+			$slash = strrpos($path, '/');
+			$dot = strrpos($path, '.');
+			$justpath = substr($path, 0, $slash);
+			$fname = substr($path, $slash+1, $dot-($slash+1));
+			$ext = substr($path, $dot+1);
+
+			$query = "SELECT id from $post_table WHERE image = '$fname.$ext'";
+			$result = $db->query($query);
+			if($result === false)
+			{
+				print "Error getting image's post ID<br/>";
+				return false;
+			}
+			if($result->num_rows != 1)
+			{
+				print "Found multiple posts with same image field. Will not attempt to fix<br/>query: $query<br/>rows: ".$result->num_rows."<br/>";
+				return false;
+			}
+			$row = $result->fetch_array();
+			$id = $row[0];
+
+			$newpath = "$justpath/$fname.$newext";
+			$query = "UPDATE $post_table SET ext = '.$newext', image = '$fname.$newext' WHERE id = '$id'";
+			$result = $db->query($query);
+			if($result === false)
+			{
+				print "Database error fixing image extension<br/>";
+				return false;
+			}
+			else
+			{
+				if(rename($path, $newpath))
+					return true;
+			}
+			return false;
 		}
 	}
 ?>

@@ -10,6 +10,7 @@
 	$image = new image();
 	$new_count = 0;
 	$fail_count = 0;
+	$fix_count = 0;
 
 	$buckets = array();
 	$image_dir = "./$image_folder/";
@@ -51,14 +52,41 @@
 				$new_count++;
 				print "<span style='color:green'>$thumb</span>&nbsp;<a href='$thumb_href'>link</a><br><br/>";
 			}
-			else
+			else if($ext == "webm" || $ext == "mp4")
 			{
 				$fail_count++;
-				print "<span style='color:red'>$thumb failed:</span>".$image->geterror().".<br/><a href='$img_href'>Source image</a> might be corrupted<br/><br/>";
+				print "<span style='color:red'>$thumb failed:</span>".$image->geterror().".<br/><a href='$img_href'>Source video</a> might be corrupted<br/><br/>";
+			}
+			else
+			{
+				$fixFlag = false;
+
+				if(image::wrongext($imgpath))
+				{
+					print "File type mismatch. Extension is $ext but mimetype is ".$image->getmime()."<br/>";
+
+					if($image->fixext($imgpath))
+					{
+						print "File extension successfully changed<br/><br/>";
+						$fix_count++;
+					}
+					else
+					{
+						$fail_count++;
+						print "<span style='color:red'>$thumb failed:</span>".$image->geterror().".<br/><a href='$img_href'>Source image</a> might be corrupted<br/><br/>";
+					}
+				}
+				else
+				{
+					$fail_count++;
+					print "<span style='color:red'>$thumb failed:</span>".$image->geterror().".<br/><a href='$img_href'>Source image</a> might be corrupted<br/><br/>";
+				}
 			}
 		}
 	}
 	print "<hr/>
 	Thumbnails created: $new_count<br/>
-	Thumbnails failed: $fail_count<br/>";
+	Thumbnails failed: $fail_count<br/>
+	Image filenames fixed: $fix_count<br/><br/>
+	If any filenames were fixed you will need to run this script again.";
 ?>
