@@ -20,6 +20,8 @@
 			$g_tags = '';
 			$g_parent = '';
 			$g_score = '';
+			$g_width = '';
+			$g_height = '';
 			
 			foreach($ttags as $current)
 			{
