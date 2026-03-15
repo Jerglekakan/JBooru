@@ -14,6 +14,10 @@
 	';
 ?>
 	<div class="space" id="links">
+<?php
+		if(isset($user) && $user->gotpermission('admin_panel'))
+			echo '<a href="'.$site_url.'admin/" style="color: red;">Admin</a>';
+?>
 		<a href="index.php?page=post&amp;s=list" title="A paginated list of every post">Posts</a>
 		<a href="index.php?page=comment&amp;s=list">Comments</a>
 		<a href="index.php?page=tags&amp;s=list">Tags</a>
