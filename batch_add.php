@@ -142,7 +142,7 @@
 			{
 				print "<span style='color: rgb(255,0,0)'>failed to upload image.</span><br/>
 				SQL Error: ".$db->error."<br/>
-				File Hash (md5):".md5_file($file)."<br/>";
+				File Hash (md5):".md5_file($file)."<br/><br/>";
 				unlink("./images/".$iinfo[0]."/".$iinfo[1]);
 				$image->folder_index_decrement($iinfo[0]);
 				$ttags = explode(" ",$tags);
@@ -185,7 +185,7 @@
 
 				$query = "UPDATE $post_count_table SET last_update='20060101' WHERE access_key='posts'";
 				$db->query($query);
-				print "<span style=\"color: rgb(52, 170, 0);\">Image added.</span><br/>";
+				print "<span style=\"color: rgb(52, 170, 0);\">Image added.</span><br/><br/>";
 				$uploaded_files++;
 			}
 		}
@@ -194,7 +194,7 @@
 			$iinfo = explode(":",$iinfo);
 			$rejected_files++;
 			print "<span style=\"color: rgb(255, 0, 0);\">getRemoteImage() failed, file not uploaded</span><br/>
-			Error: ".$error."File Hash (md5): ".md5_file($file)."<br/>";
+			Error: ".$error."File Hash (md5): ".md5_file($file)."<br/><br/>";
 		}
 	}
 
