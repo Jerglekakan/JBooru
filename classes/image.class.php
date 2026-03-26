@@ -117,6 +117,7 @@
 			$bucket = $timage[0];
 			$fname = $timage[1]; 
 			$ext = strrchr($fname, ".");
+			$ext = strtolower($ext);
 			$thumbnail_name = "thumbnail_".$fname;
 			if($ext == ".jpg" || $ext == ".jpeg")
 			{
