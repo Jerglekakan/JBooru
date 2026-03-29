@@ -283,7 +283,14 @@
 			}
 			$cdir = $this->getcurrentfolder();
 			if(!is_dir("./images/".$cdir."/"))
-				$this->makefolder($cdir);
+			{
+				if(!$this->makefolder($cdir))
+				{
+					$this->error = "Could not create containing folder for image";
+					$this->extension = "";
+					return false;
+				}
+			}
 			if($ext != ".svg" && preg_match("#<script|<html|<head|<title|<body|<pre|<table|<a\s+href|<img|<plaintext#si", $data) == 1)
 			{
 				$this->error = "Found HTML embedded in file!<br/>";
@@ -361,9 +368,12 @@
 		
 		function makefolder($folder)
 		{
-			mkdir("./images/".$folder);
-			copy("./images/index.html","./images/".$folder."/index.html");
+			if(mkdir("./images/".$folder) === false)
+				return false;
+			if(copy("./images/index.html","./images/".$folder."/index.html") === false)
+				return false;
 			$this->makesqlfolder($folder);
+			return true;
 		}
 		
 		function makesqlfolder($folder)
