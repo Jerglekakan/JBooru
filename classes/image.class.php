@@ -341,9 +341,8 @@
 			$query = "SELECT name FROM $folder_index_table WHERE count < 1000 ORDER BY count DESC LIMIT 1";
 			$result = $db->query($query);
 			$row = $result->fetch_assoc();
-			$name = $row['name'];
-			if($name != "")
-				return $name;
+			if($row && $row['name'] != "")
+				return $row['name'];
 			else
 			{
 				$query = "SELECT name FROM $folder_index_table WHERE COUNT >= '1000' ORDER BY id DESC LIMIT 1";
