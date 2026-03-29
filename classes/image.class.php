@@ -209,9 +209,7 @@
 				$mem_limit = $matches[1] * 1024; // nnnK -> nnn KB
 			    }
 			}
-			$mem_cutoff = 1048576;  //Stop fread() when the current memory usage gets within ~1MB of the limit
-						//Not doing this for any particular reason, just don't like the idea of getting
-						//close to the memory limit since exceeding it is a fatal error
+
 			$misc = new misc();
 			if(strlen($url) == 0 || strlen(trim($url)) == 0 || !self::validext($url))
 				return false;
@@ -220,6 +218,15 @@
 				$this->error = "Image filename too long<br/>";
 				$this->extension = "";
 				return false;
+			}
+			if(substr($url, 0, 2) == "./")
+			{
+				if(filesize($url) + memory_get_usage() > $mem_limit - 10000000)
+				{
+					$this->error = "Image too large<br/>";
+					$this->extension = "";
+					return false;
+				}
 			}
 			$ext = strrchr($url, '.');
 			$ext = substr($ext, 1);
@@ -239,15 +246,7 @@
 				}
 				while(!feof($f))
 				{
-					if($mem_limit - (memory_get_usage() + $mem_cutoff) > 4096) {
-						$data .= fread($f,4096); 
-					} else {
-						fclose($f);
-						unset($data);
-						$this->error = "Image too large. Memory limit reached!<br/>";
-						$this->extension = "";
-						return false;
-					}
+					$data .= fread($f,4096); 
 				}
 				fclose($f);
 				if($dl_count == 0)
