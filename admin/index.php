@@ -37,31 +37,47 @@
 			.phpprop:hover {
 				text-decoration: underline;
 			}
+			div.sidebar {
+				width: 100%;
+			}
+			#content {
+				display: flex;
+			}
+			#post-list {
+				flex: 2;
+			}
+			#admin_info {
+				flex: 7;
+			}
 		</style>
 
-		<h2>Server settings</h2>
-		<span>System Timezone: <?php echo file_get_contents("/etc/timezone"); ?></span>
-		<br/><br/>
+		<div id="admin_info">
+			<h2>Server settings</h2>
+			<span>System Timezone: <?php echo file_get_contents("/etc/timezone"); ?></span>
+			<br/><br/>
 
-		<h2>Config settings</h2>
-		<span>Default timezone: <?php echo date_default_timezone_get() ?></span>
-		<br/><br/>
+			<h2>Config settings</h2>
+			<span>Default timezone: <?php echo date_default_timezone_get() ?></span>
+			<br/><br/>
 
-		<h2>PHP settings</h2>
-		<span class="phpprop" title="file_uploads">Uploads</span>: <strong><?php echo (ini_get("file_uploads") == "1") ? "Enabled" : "Disabled" ?></strong><br/><br/>
+			<h2>PHP settings</h2>
+			<span class="phpprop" title="file_uploads">Uploads</span>: <strong><?php echo (ini_get("file_uploads") == "1") ? "Enabled" : "Disabled" ?></strong><br/><br/>
 
-		<span class="phpprop" title="max_execution_time">Max script execution time:</span> <?php echo (ini_get("max_execution_time") == "0") ? "Unlimited" : ini_get("max_execution_time") ?><br/>
-		<span class="phpprop" title="max_input_time">Max input time</span>: <?php echo (ini_get("max_input_time") == "-1") ? "Unlimited" : ini_get("max_input_time") ?><br/><br/>
+			<span class="phpprop" title="max_execution_time">Max script execution time:</span> <?php echo (ini_get("max_execution_time") == "0") ? "Unlimited" : ini_get("max_execution_time") ?><br/>
+			<span class="phpprop" title="max_input_time">Max input time</span>: <?php echo (ini_get("max_input_time") == "-1") ? "Unlimited" : ini_get("max_input_time") ?><br/><br/>
 
-		<span class="phpprop" title="memory_limit">Memory limit</span>: <?php echo ini_get("memory_limit"); ?><br/>
-		<span class="phpprop" title="upload_max_filesize">Max upload size</span>: <?php echo ini_get("upload_max_filesize"); ?><br/>
-		<span class="phpprop" title="post_max_size">Max POST size</span>: <?php echo ini_get("post_max_size"); ?><br/><br/>
+			<span class="phpprop" title="memory_limit">Memory limit</span>: <?php echo ini_get("memory_limit"); ?><br/>
+			<span class="phpprop" title="upload_max_filesize">Max upload size</span>: <?php echo ini_get("upload_max_filesize"); ?><br/>
+			<span class="phpprop" title="post_max_size">Max POST size</span>: <?php echo ini_get("post_max_size"); ?><br/><br/>
 
-		<h2>PHP settings (background)</h2>
+			<h2>PHP settings (background)</h2>
 <?php
-		$str = "";
-		exec("php -f stats.php", $str);
-		echo implode("", $str);
+			$str = "";
+			exec("php -f stats.php", $str);
+			echo implode("", $str);
+?>
+		</div>
+<?php
 	}
 ?>
 <br></body></html>
