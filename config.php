@@ -97,4 +97,7 @@
 	$enable_cache = false;
 	//cache dir, all cache will be stored in subdirs to this. Put it on RAM or FAST Raid drives.
 	//$main_cache_dir = "NUL:\\";
+
+	//Uncomment and change if you want a timezone other than UTC
+	//date_default_timezone_set("America/New_York");
 ?>
