@@ -38,7 +38,7 @@ Tag categories can be created and deleted via a page added to the admin interfac
 
 ### Recursive Image Import
 
-The `batch_add.php` script, which allows for the mass importing of large a quantity of images that are stored on the server but have not been added to the database, has been modified to be fully recursive. It searches the (configurable) directory `import/` located in the same directory as the script and adds all images to the database. Every directory that the script encounters will have its name treated as a full tag and that tag will be added to every image inside that directory and its children.
+The `batch_add.php` script, which allows for the mass importing of large a quantity of images that are stored on the server but have not been added to the database, has been modified to be fully recursive. It searches the (configurable) directory `import/` located in the same directory as the script and adds all images to the database. Every directory that the script encounters will have its name treated as a full tag and that tag will be added to every image inside that directory and its children. This script has also been altered to run as a background process on the server with a means of starting an import in the admin interface.
 
 For this feature you are advised to use the following `php.ini` config values:
 
