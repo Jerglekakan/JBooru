@@ -74,11 +74,11 @@
 			}
 			return ele.dataset.file;
 		}
-		function renderImport(job)
+		function renderImport(job, dataFile)
 		{
 			ele = document.createElement("div");
 			ele.classList.add("jimp", "collapsable", "closed");
-			ele.innerHTML = `<div class="file">${job.filepath.replace(currentPrefix, "")}</div>
+			ele.innerHTML = `<div class="file">${job.filepath.replace(dataFile.prefix, "")}</div>
 			<div class="details">
 			<span>Tags: ${job.tags}</span>
 			<span>Hash: ${job.hash}</span>
@@ -99,7 +99,7 @@
 			let start = (num-1) * jobsToDisplay;
 			for(let i = start; i < Math.min(start+jobsToDisplay, d.imports.length); ++i)
 			{
-				container.appendChild(renderImport(d.imports[i]));
+				container.appendChild(renderImport(d.imports[i], d));
 			}
 
 			for(let ele of container.querySelectorAll(".file, .collapse-label"))
@@ -120,11 +120,11 @@
 				});
 			}
 		}
-		function renderError(job)
+		function renderError(job, dataFile)
 		{
 			ele = document.createElement("div");
 			ele.classList.add("jerr", "collapsable", "closed");
-			ele.innerHTML = `<div class="file">${job.filepath.replace(currentPrefix, "")}</div>
+			ele.innerHTML = `<div class="file">${job.filepath.replace(dataFile.prefix, "")}</div>
 			<div class="details">
 			<span>Link: <a href="../${job.filepath}">link</a></span>
 			<span>Error type: ${job.errortype}</span>
@@ -140,7 +140,7 @@
 			let start = (num-1) * errorsToDisplay;
 			for(let i = start; i < Math.min(start+errorsToDisplay, d.errors.length); ++i)
 			{
-				container.appendChild(renderError(d.errors[i]));
+				container.appendChild(renderError(d.errors[i], d));
 			}
 
 			for(let ele of container.querySelectorAll(".file, .collapse-label"))
@@ -171,7 +171,7 @@
 					switch(ev.event)
 					{
 						case "info":
-							currentPrefix = ev.prefix || "";
+							obj.prefix = ev.prefix || "";
 						break;
 						case "import":
 							obj.imports.push(ev);
